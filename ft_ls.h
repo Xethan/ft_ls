@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/19 16:09:43 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/19 16:41:57 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <string.h>
 # include "libft.h"
 
-int		track_error(char **arg);
+//int		check_error_arguments(char **argv);
+int		check_directory_name(char *arg);
+int		check_error_options(char **arg);
 
 #endif
