@@ -6,13 +6,13 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/19 16:01:28 by ncolliau          #+#    #+#              #
-#    Updated: 2014/11/19 16:41:58 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/11/20 15:20:16 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
 
-SRC = main.c track_error.c
+SRC = main.c track_error.c check_options.c bis.c
 
 OBJ = $(SRC:.c=.o)
 

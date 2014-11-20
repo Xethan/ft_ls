@@ -6,57 +6,68 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/19 16:41:54 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/20 17:38:02 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-typedef struct dirent t_dirent;
-typedef struct stat t_stat;
+void	disp_if_needed(t_dirent *sdir, t_options *is_option)
+{
+	if (sdir->d_name[0] == '.' && is_option->a == 0)
+		return ;
+	ft_putendl(sdir->d_name);
+}
 
-int		main(int argc, char **argv)
+int		opendir_and_list(char *dir_name, t_options *is_option, int disp_name_dir)
 {
 	DIR			*ptr_dir;
 	t_dirent	*sdir;
-	//t_stat		*sstat;
+
+	if ((ptr_dir = opendir(dir_name)) == NULL)
+	{
+		perror("ft_ls");
+		return (0);
+	}
+	if (disp_name_dir == DISP_NAME)
+	{
+		ft_putstr(dir_name);
+		ft_putstr(":\n");
+	}
+	while ((sdir = readdir(ptr_dir)) != NULL)
+		disp_if_needed(sdir, is_option);
+	return (1);
+}
+
+void	do_ls(int argc, char **argv, t_options *is_option)
+{
 	int		i;
 
-	i = 0;
-	if (check_error_options(argv) != 1)
+	i = 1;
+	if (argc > 1)
+		i = check_options(argv, is_option);
+	if (argc == i)
+		opendir_and_list(".", is_option, DO_NOT_DISP_NAME);
+	else if (argc == i + 1)
+		opendir_and_list(argv[i], is_option, DO_NOT_DISP_NAME);
+	else if (argc > i + 1)
 	{
-		ft_putendl("Arguments are invalid");
-		return (0);
+		while (argv[i])
+		{
+			if (opendir_and_list(argv[i], is_option, DISP_NAME) == 1 && argv[i + 1])
+				ft_putchar('\n');
+			i++;
+		}
 	}
-	// i = check_options(argv);
-	if (argc == i + 1)
-	{
-		ptr_dir = opendir(".");
-		while ((sdir = readdir(ptr_dir)) != NULL)
-			if (sdir->d_name[0] != '.')
-				ft_putendl(sdir->d_name);
-		return (0);
-	}
-	else
-	{
-		//while (argv[i])
-		//{
-			if (check_directory_name(argv[i]) != 1)
-			{
-				ft_putendl("ls : No such file or directory");
-			}
-			else
-			{
-				ptr_dir = opendir(argv[i]);
-				while ((sdir = readdir(ptr_dir)) != NULL)
-					if (sdir->d_name[0] != '.')
-						ft_putendl(sdir->d_name);
-			}
-		//	i++;
-		//}
-	}
-	//sstat = (struct stat*)malloc(1 * sizeof(*sstat));
-	//stat("~/git_hub/get_next_line/ft_ls/test_dir", sstat);
-	//ft_ls("ft_ls");
+}
+
+int		main(int argc, char **argv)
+{
+	t_options	*is_option;
+
+	is_option = (t_options *)malloc(sizeof(*is_option));
+	is_option = init_options_to_zero(is_option);
+	do_ls(argc, argv, is_option);
+	free(is_option);
 	return (0);
 }
