@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/24 10:05:25 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/24 12:32:53 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ t_arg_name				*lst_str_new(char *arg_name);
 **       BIS.C :
 */
 
+t_arg_name				*move_end_lst(t_arg_name *list);
 t_arg_name				*sort_files(char **arg, t_options *is_opt);
 t_arg_name				*put_arg_into_list(char **arg, int i);
 

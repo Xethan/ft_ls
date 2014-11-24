@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/24 09:51:03 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/24 12:32:49 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,14 @@ void	do_ls(int argc, char **argv, t_options *is_opt)
 	{
 		while (list)
 		{
-			if (opendir_and_list(list->arg_name, is_opt, NAME) == 1 && list->next)
+			if (opendir_and_list(list->arg_name, is_opt, NAME) == 1 \
+				&& ((list->next && is_opt->r == 0) \
+				|| (list->previous && is_opt->r == 1)))
 				ft_putchar('\n');
-			list = list->next;
+			if (is_opt->r == 1)
+				list = list->previous;
+			else
+				list = list->next;
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 11:09:53 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/24 10:05:33 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/24 12:32:52 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	lst_str_add(t_arg_name **begin_list, t_arg_name *new)
 {
 	new->next = *begin_list;
 	new->previous = NULL;
+	(*begin_list)->previous = new;
 	*begin_list = new;
 }
 
