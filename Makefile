@@ -6,13 +6,13 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/19 16:01:28 by ncolliau          #+#    #+#              #
-#    Updated: 2014/11/20 15:20:16 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/11/23 11:21:43 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
 
-SRC = main.c track_error.c check_options.c bis.c
+SRC = main.c track_error.c check_options.c bis.c handle_list.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -29,4 +29,5 @@ fclean : clean
 
 re : fclean all
 
-norme : norminette $(SRC) ft_ls.h
+norme :
+			norminette $(SRC) ft_ls.h

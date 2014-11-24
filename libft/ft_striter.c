@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/06 11:12:03 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/16 11:20:32 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:55:11 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
 void ft_striter(char *s, void (*f)(char *))
 {

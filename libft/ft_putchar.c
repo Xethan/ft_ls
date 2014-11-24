@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 17:33:52 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/08 18:08:18 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:53:46 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "libft.h"
 
 void	ft_putchar(char c)
 {

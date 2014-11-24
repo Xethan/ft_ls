@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 14:30:12 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:53:59 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:55:42 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
 size_t	ft_strlen(const char *s)
 {

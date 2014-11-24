@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/04 09:16:42 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:23:41 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:52:19 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
 void	ft_bzero(void *s, size_t n)
 {

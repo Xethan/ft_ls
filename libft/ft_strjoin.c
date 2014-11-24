@@ -6,13 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/06 13:38:36 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/16 11:20:35 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:55:33 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <string.h>
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

@@ -6,12 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/07 10:08:37 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/16 11:20:56 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:56:47 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <string.h>
+#include "libft.h"
 
 int		n_letter(char const *s, int index, char c)
 {

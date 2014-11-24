@@ -6,13 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/06 12:06:28 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/16 11:20:42 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:55:49 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <string.h>
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {

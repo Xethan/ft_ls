@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 10:20:58 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:57:42 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:55:55 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
 char	*ft_strncat(char *s1, const char *s2, size_t n)
 {

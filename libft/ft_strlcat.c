@@ -6,12 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 10:37:35 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:53:24 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:55:36 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <string.h>
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {

@@ -6,13 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/04 13:41:56 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:48:20 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:54:58 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <string.h>
 
 char	*ft_strdup(const char *s1)
 {

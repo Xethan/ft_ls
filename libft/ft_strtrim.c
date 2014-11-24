@@ -6,11 +6,10 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/06 13:51:01 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/13 13:09:08 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:57:00 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
 
 int		ft_strlen_without_spaces(char const *s)

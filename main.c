@@ -6,57 +6,60 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/20 17:38:02 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/24 09:51:03 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	disp_if_needed(t_dirent *sdir, t_options *is_option)
+void	disp_if_needed(t_dirent *sdir, t_options *is_opt)
 {
-	if (sdir->d_name[0] == '.' && is_option->a == 0)
+	if (sdir->d_name[0] == '.' && is_opt->a == 0)
 		return ;
 	ft_putendl(sdir->d_name);
 }
 
-int		opendir_and_list(char *dir_name, t_options *is_option, int disp_name_dir)
+int		opendir_and_list(char *dir_name, t_options *is_opt, int disp_name)
 {
 	DIR			*ptr_dir;
 	t_dirent	*sdir;
 
 	if ((ptr_dir = opendir(dir_name)) == NULL)
 	{
-		perror("ft_ls");
+		ft_putstr("ft_ls: ");
+		perror(dir_name);
 		return (0);
 	}
-	if (disp_name_dir == DISP_NAME)
+	if (disp_name == NAME)
 	{
 		ft_putstr(dir_name);
 		ft_putstr(":\n");
 	}
 	while ((sdir = readdir(ptr_dir)) != NULL)
-		disp_if_needed(sdir, is_option);
+		disp_if_needed(sdir, is_opt);
 	return (1);
 }
 
-void	do_ls(int argc, char **argv, t_options *is_option)
+void	do_ls(int argc, char **argv, t_options *is_opt)
 {
-	int		i;
+	int			i;
+	t_arg_name	*list;
 
 	i = 1;
 	if (argc > 1)
-		i = check_options(argv, is_option);
+		i = check_options(argv, is_opt);
+	list = sort_files(argv, is_opt);
 	if (argc == i)
-		opendir_and_list(".", is_option, DO_NOT_DISP_NAME);
+		opendir_and_list(".", is_opt, NO_NAME);
 	else if (argc == i + 1)
-		opendir_and_list(argv[i], is_option, DO_NOT_DISP_NAME);
+		opendir_and_list(list->arg_name, is_opt, NO_NAME);
 	else if (argc > i + 1)
 	{
-		while (argv[i])
+		while (list)
 		{
-			if (opendir_and_list(argv[i], is_option, DISP_NAME) == 1 && argv[i + 1])
+			if (opendir_and_list(list->arg_name, is_opt, NAME) == 1 && list->next)
 				ft_putchar('\n');
-			i++;
+			list = list->next;
 		}
 	}
 }

@@ -6,12 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/07 11:55:11 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 16:21:38 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:52:31 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <string.h>
+#include "libft.h"
 
 int		count_nb_len(int n)
 {

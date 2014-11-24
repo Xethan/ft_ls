@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 17:31:22 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/20 17:38:00 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 11:07:54 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	ft_lstadd(t_list **alst, t_list *new)
 {
 	new->next = *alst;
-	alst = new;
+	*alst = new;
 }

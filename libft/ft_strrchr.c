@@ -6,13 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/04 10:18:11 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 15:48:06 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:56:39 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <string.h>
 
 char	*ft_strrchr(const char *s, int c)
 {

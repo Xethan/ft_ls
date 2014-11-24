@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/05 13:07:59 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:39:25 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:53:39 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
 void	*ft_memset(void *b, int c, size_t len)
 {

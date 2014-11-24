@@ -6,11 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/04 14:41:41 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/18 14:46:44 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 10:54:49 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
 char	*ft_strcpy(char *dst, const char *src)
 {

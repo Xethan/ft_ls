@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/04 13:57:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/20 17:37:55 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/22 11:46:53 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define LIBFT_H
 
 # include <string.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 typedef struct		s_list
 {
@@ -75,6 +77,7 @@ char				**ft_strsplit(char const *s, char c);
 char				*ft_strstr(const char *s1, const char *s2);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strtrim(char const *s);
+int					ft_tabstrlen(char **tabstr);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
 
