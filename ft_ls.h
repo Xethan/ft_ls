@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/24 12:32:53 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/28 15:34:14 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stdio.h>
+# include <time.h>
+# include <pwd.h>
+# include <grp.h>
+# include <sys/types.h>
 # include "libft.h"
 
 # define NAME 1
@@ -41,14 +45,22 @@ typedef struct			s_arglist
 	char				*arg_name;
 	struct s_arglist	*next;
 	struct s_arglist	*previous;
-}						t_arg_name;
+}						t_arglist;
+
+typedef struct			s_spaces
+{
+	size_t				links;
+	size_t				size;
+}						t_spaces;
 
 /*
 **       MAIN.C :
 */
 
-void					disp_if_needed(t_dirent *sdir, t_options *is_opt);
-int						opendir_and_list (char *dir_name, t_options *is_opt, int disp_name_dir);
+void					disp_if_needed \
+						(char *file_name, t_options *is_opt, char *dir_name, t_spaces spaces);
+int						opendir_and_list \
+						(char *dir_name, t_options *is_opt, int disp_name_dir);
 void					do_ls(int argc, char **argv, t_options *is_opt);
 
 /*
@@ -61,26 +73,42 @@ int						check_error_options(char *arg);
 **       CHECK_OPTIONS.C :
 */
 
-t_options				*init_options_to_zero(t_options *is_option);
-t_options				*get_options(t_options *is_option, char c);
-int						check_options(char **arg, t_options *is_option);
+t_options				*init_options_to_zero(t_options *is_opt);
+t_options				*get_options(t_options *is_opt, char c);
+int						check_options(char **arg, t_options *is_opt);
 
 /*
 **       HANDLE_LIST.C :
 */
 
-void					lst_str_add(t_arg_name **begin_list, t_arg_name *new);
-void					lst_creat_begin(t_arg_name **begin_list, void *arg_name);
-void					lst_creat_after(t_arg_name *list, void *arg_name);
-void					lst_creat_before(t_arg_name *list, void *arg_name);
-t_arg_name				*lst_str_new(char *arg_name);
+void					lst_str_add(t_arglist **begin_list, t_arglist *new);
+void					lst_creat_begin\
+						(t_arglist **begin_list, void *arg_name);
+void					lst_creat_after(t_arglist *list, void *arg_name);
+void					lst_creat_before(t_arglist *list, void *arg_name);
+t_arglist				*lst_str_new(char *arg_name);
 
 /*
-**       BIS.C :
+**       SORT_ARGS.C :
 */
 
-t_arg_name				*move_end_lst(t_arg_name *list);
-t_arg_name				*sort_files(char **arg, t_options *is_opt);
-t_arg_name				*put_arg_into_list(char **arg, int i);
+t_arglist				*reverse_list(t_arglist **begin_list);
+t_arglist				*sort_args(char **arg, t_options *is_opt);
+t_arglist				*put_arg_into_list(char **arg, int i);
+
+/*
+**       STAT.C :
+*/
+
+char					*get_path(char *file_name, char *dir_name);
+void					disp_rights(mode_t rights, int test, char to_disp);
+void					disp_all_rights(mode_t rights);
+void					do_opt_l(char *file_name, char *dir_name, t_spaces spaces);
+
+/*
+**       HOW_MANY_SPACES.C :
+*/
+
+t_spaces				how_many_spaces(t_arglist *file_list, char *dir_name, t_spaces spaces);
 
 #endif

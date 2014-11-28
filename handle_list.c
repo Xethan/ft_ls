@@ -6,13 +6,13 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 11:09:53 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/24 12:32:52 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/28 15:15:00 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	lst_str_add(t_arg_name **begin_list, t_arg_name *new)
+void		lst_str_add(t_arglist **begin_list, t_arglist *new)
 {
 	new->next = *begin_list;
 	new->previous = NULL;
@@ -20,11 +20,11 @@ void	lst_str_add(t_arg_name **begin_list, t_arg_name *new)
 	*begin_list = new;
 }
 
-t_arg_name	*lst_str_new(char *arg_name)
+t_arglist	*lst_str_new(char *arg_name)
 {
-	t_arg_name	*new_list;
+	t_arglist	*new_list;
 
-	new_list = (t_arg_name *)malloc(sizeof(t_arg_name));
+	new_list = (t_arglist *)malloc(sizeof(t_arglist));
 	if (new_list == NULL)
 		return (NULL);
 	if ((new_list->arg_name = malloc(ft_strlen(arg_name) + 1)) == NULL)
@@ -38,9 +38,9 @@ t_arg_name	*lst_str_new(char *arg_name)
 	return (new_list);
 }
 
-void		lst_creat_after(t_arg_name *list, void *arg_name)
+void		lst_creat_after(t_arglist *list, void *arg_name)
 {
-	t_arg_name	*new;
+	t_arglist	*new;
 
 	if ((new = lst_str_new(arg_name)) == NULL)
 		return ;
@@ -49,9 +49,9 @@ void		lst_creat_after(t_arg_name *list, void *arg_name)
 	list->next = new;
 }
 
-void		lst_creat_before(t_arg_name *list, void *arg_name)
+void		lst_creat_before(t_arglist *list, void *arg_name)
 {
-	t_arg_name	*new;
+	t_arglist	*new;
 
 	if ((new = lst_str_new(arg_name)) == NULL)
 		return ;
@@ -60,9 +60,9 @@ void		lst_creat_before(t_arg_name *list, void *arg_name)
 	list->previous = new;
 }
 
-void		lst_creat_begin(t_arg_name **begin_list, void *arg_name)
+void		lst_creat_begin(t_arglist **begin_list, void *arg_name)
 {
-	t_arg_name	*new;
+	t_arglist	*new;
 
 	if ((new = lst_str_new(arg_name)) == NULL)
 		return ;
