@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/28 15:34:14 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/29 15:51:03 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,6 @@
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
 
-typedef struct			s_options
-{
-	int					l;
-	int					r_caps;
-	int					r;
-	int					a;
-	int					t;
-}						t_options;
-
 typedef struct			s_arglist
 {
 	char				*arg_name;
@@ -47,21 +38,23 @@ typedef struct			s_arglist
 	struct s_arglist	*previous;
 }						t_arglist;
 
-typedef struct			s_spaces
+typedef struct			s_info
 {
-	size_t				links;
+	size_t				nlink;
 	size_t				size;
-}						t_spaces;
+	size_t				uid;
+	size_t				gid;
+}						t_info;
 
 /*
 **       MAIN.C :
 */
 
 void					disp_if_needed \
-						(char *file_name, t_options *is_opt, char *dir_name, t_spaces spaces);
+						(char *file_name, char *dir_name, t_info nb_spaces);
 int						opendir_and_list \
-						(char *dir_name, t_options *is_opt, int disp_name_dir);
-void					do_ls(int argc, char **argv, t_options *is_opt);
+						(char *dir_name, int disp_name_dir);
+void					do_ls(int argc, char **argv);
 
 /*
 **       TRACK_ERROR.C :
@@ -73,9 +66,8 @@ int						check_error_options(char *arg);
 **       CHECK_OPTIONS.C :
 */
 
-t_options				*init_options_to_zero(t_options *is_opt);
-t_options				*get_options(t_options *is_opt, char c);
-int						check_options(char **arg, t_options *is_opt);
+void					get_options(char c);
+int						check_options(char **arg);
 
 /*
 **       HANDLE_LIST.C :
@@ -93,22 +85,24 @@ t_arglist				*lst_str_new(char *arg_name);
 */
 
 t_arglist				*reverse_list(t_arglist **begin_list);
-t_arglist				*sort_args(char **arg, t_options *is_opt);
+t_arglist				*sort_args(char **arg);
 t_arglist				*put_arg_into_list(char **arg, int i);
 
 /*
 **       STAT.C :
 */
 
+int						disp_if_file(char *arg_name);
 char					*get_path(char *file_name, char *dir_name);
 void					disp_rights(mode_t rights, int test, char to_disp);
 void					disp_all_rights(mode_t rights);
-void					do_opt_l(char *file_name, char *dir_name, t_spaces spaces);
+void					do_opt_l(char *file_name, char *dir_name, t_info nb_spaces);
 
 /*
 **       HOW_MANY_SPACES.C :
 */
 
-t_spaces				how_many_spaces(t_arglist *file_list, char *dir_name, t_spaces spaces);
+t_info					init_info_to_zero(t_info p_info);
+t_info					how_many_spaces(t_arglist *file_list, char *dir_name, t_info nb_spaces);
 
 #endif

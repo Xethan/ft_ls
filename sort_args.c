@@ -6,11 +6,13 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/28 16:14:05 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/11/29 11:58:57 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+extern int g_opt_r;
 
 t_arglist	*reverse_list(t_arglist **begin_list)
 {
@@ -59,7 +61,7 @@ t_arglist	*put_arg_into_list(char **arg, int i)
 	return (*begin_list);
 }
 
-t_arglist	*sort_args(char **arg, t_options *is_opt)
+t_arglist	*sort_args(char **arg)
 {
 	t_arglist	*list;
 	int			i;
@@ -70,7 +72,7 @@ t_arglist	*sort_args(char **arg, t_options *is_opt)
 	if (!arg[i])
 		return (NULL);
 	list = put_arg_into_list(arg, i);
-	if (is_opt->r == 1)
+	if (g_opt_r == 1)
 		list = reverse_list(&list);
 	return (list);
 }
