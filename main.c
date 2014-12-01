@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/29 15:50:34 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/01 17:34:52 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir)
 	t_arglist	*list;
 
 	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
+	//test malloc
 	if ((s_dir = readdir(p_dir)) != NULL)
 		*begin_list = lst_str_new(s_dir->d_name);
 	while ((s_dir = readdir(p_dir)) != NULL)
@@ -70,7 +71,7 @@ int			opendir_and_list(char *dir_name, int disp_name)
 	{
 		ft_putstr_fd("ft_ls: ", 2);
 		perror(dir_name);
-		exit(EXIT_FAILURE);
+		return (0);
 	}
 	if (disp_name == NAME)
 	{
@@ -101,7 +102,10 @@ int			opendir_and_list(char *dir_name, int disp_name)
 			if ((p_stat->st_mode & 0040000) != 0
 					&& ft_strequ(file_list->arg_name, ".") == 0
 					&& ft_strequ(file_list->arg_name, "..") == 0)
+			{
+				ft_putchar('\n');
 				opendir_and_list(ft_strjoin(ft_strjoin(dir_name, "/"), file_list->arg_name), NAME);
+			}
 			file_list = file_list->next;
 			free(p_stat);
 		}
@@ -110,7 +114,7 @@ int			opendir_and_list(char *dir_name, int disp_name)
 	return (1);
 }
 
-void		do_ls(int argc, char **argv)
+void		ft_ls(int argc, char **argv)
 {
 	int			i;
 	t_arglist	*list;
@@ -118,8 +122,6 @@ void		do_ls(int argc, char **argv)
 	i = 1;
 	if (argc > 1)
 		i = check_options(argv);
-	if (g_opt_r == 1)
-		g_opt_r = 1;
 	list = sort_args(argv);
 	if (argc == i)
 		opendir_and_list(".", NO_NAME);
@@ -129,9 +131,9 @@ void		do_ls(int argc, char **argv)
 	{
 		while (list)
 		{
-			if (opendir_and_list(list->arg_name, NAME) == 1)
-				if (list->next)
-					ft_putstr("\n");
+			opendir_and_list(list->arg_name, NAME);
+			if (list->next)
+				ft_putstr("\n");
 			list = list->next;
 		}
 	}
@@ -140,6 +142,6 @@ void		do_ls(int argc, char **argv)
 
 int			main(int argc, char **argv)
 {
-	do_ls(argc, argv);
+	ft_ls(argc, argv);
 	return (0);
 }

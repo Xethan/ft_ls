@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/29 11:58:57 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/01 17:52:28 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,89 @@
 
 extern int g_opt_r;
 
-t_arglist	*reverse_list(t_arglist **begin_list)
+t_arglist	*put_arg_into_list(t_arglist **begin_list, char *arg)
 {
-	t_arglist	*new_list;
-	t_arglist	*p_list;
-
-	p_list = *begin_list;
-	new_list = lst_str_new(p_list->arg_name);
-	p_list = p_list->next;
-	while (p_list)
-	{
-		lst_creat_begin(&new_list, p_list->arg_name);
-		p_list = p_list->next;
-	}
-	//ft_lstdel(begin_list);
-	return (new_list);
-}
-
-t_arglist	*put_arg_into_list(char **arg, int i)
-{
-	t_arglist	**begin_list;
 	t_arglist	*list;
+	t_arglist	*cpy;
 
-	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
-	if (begin_list == NULL)
+	list = *begin_list;
+	if (list->arg_name == NULL)
 	{
-		perror("./ft_ls: malloc:");
-		exit(EXIT_FAILURE);
+		cpy = *begin_list;
+		*begin_list = lst_str_new(arg);
+		free(cpy);
 	}
-	*begin_list = lst_str_new(arg[i]);
-	i++;
-	while (arg[i])
+	else
 	{
-		list = *begin_list;
-		if (ft_strcmp(arg[i], list->arg_name) < 0)
-			lst_creat_begin(begin_list, arg[i]);
+		if (ft_strcmp(arg, list->arg_name) < 0)
+			lst_creat_begin(begin_list, arg);
 		else
 		{
-			while (list->next && ft_strcmp(arg[i], list->next->arg_name) > 0)
+			while (list->next && ft_strcmp(arg, list->next->arg_name) > 0)
 				list = list->next;
-			lst_creat_after(list, arg[i]);
+			lst_creat_after(list, arg);
 		}
-		//lst_creat_before(list, arg[i]);
-		i++;
+		//lst_creat_before(list, arg);
 	}
 	return (*begin_list);
 }
 
+t_arglist	*reverse_and_join(t_arglist *error, t_arglist *file, t_arglist *dir)
+{
+	if (g_opt_r == 1)
+		file = reverse_list(&file);
+	if (g_opt_r == 1)
+		dir = reverse_list(&dir);
+	if (file->arg_name == NULL)
+		file = dir;
+	else
+		file = lstjoin(file, dir);
+	if (error->arg_name == NULL)
+		error = file;
+	else
+		error = lstjoin(error, file);
+	return (error);	
+}
+
+t_arglist	*create_list_from_argv(char **arg, int i)
+{
+	t_stat		*p_stat;
+	t_arglist	*dir_list;
+	t_arglist	*file_list;
+	t_arglist	*error_list;
+
+	error_list = lst_str_new(NULL);
+	file_list = lst_str_new(NULL);
+	dir_list = lst_str_new(NULL);
+	while (arg[i])
+	{
+		p_stat = (t_stat *)malloc(sizeof(t_stat));
+		//test malloc
+		if (stat(arg[i], p_stat) == -1)
+				error_list = put_arg_into_list(&error_list, arg[i]);
+		else if (S_ISREG(p_stat->st_mode) != 0)
+				file_list = put_arg_into_list(&file_list, arg[i]);
+		else if (S_ISDIR(p_stat->st_mode) != 0)
+				dir_list = put_arg_into_list(&dir_list, arg[i]);
+		i++;
+		free(p_stat);
+	}
+	dir_list = reverse_and_join(error_list, file_list, dir_list);
+	return (dir_list);
+}
+
 t_arglist	*sort_args(char **arg)
 {
-	t_arglist	*list;
+	t_arglist	*p_list;
 	int			i;
 
 	i = 1;
-	while (arg[i] && arg[i][0] == '-')
+	while (arg[i] && arg[i][0] == '-' && arg[i][1] != '-')
+		i++;
+	if (arg[i] && arg[i][1] == '-')
 		i++;
 	if (!arg[i])
 		return (NULL);
-	list = put_arg_into_list(arg, i);
-	if (g_opt_r == 1)
-		list = reverse_list(&list);
-	return (list);
+	p_list = create_list_from_argv(arg, i);
+	return (p_list);
 }

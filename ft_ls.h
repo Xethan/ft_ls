@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/29 15:51:03 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/01 17:48:30 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void					disp_if_needed \
 						(char *file_name, char *dir_name, t_info nb_spaces);
 int						opendir_and_list \
 						(char *dir_name, int disp_name_dir);
-void					do_ls(int argc, char **argv);
+void					ft_ls(int argc, char **argv);
 
 /*
 **       TRACK_ERROR.C :
@@ -81,12 +81,19 @@ void					lst_creat_before(t_arglist *list, void *arg_name);
 t_arglist				*lst_str_new(char *arg_name);
 
 /*
-**       SORT_ARGS.C :
+**       HANDLE_LIST_2.C :
 */
 
 t_arglist				*reverse_list(t_arglist **begin_list);
+t_arglist				*lstjoin(t_arglist *lst1, t_arglist *lst2);
+
+/*
+**       SORT_ARGS.C :
+*/
+
 t_arglist				*sort_args(char **arg);
-t_arglist				*put_arg_into_list(char **arg, int i);
+t_arglist				*create_list_from_argv(char **arg, int i);
+t_arglist				*put_arg_into_list(t_arglist **begin_list, char *arg);
 
 /*
 **       STAT.C :

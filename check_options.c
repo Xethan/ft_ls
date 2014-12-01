@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/29 12:00:37 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/01 10:55:44 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int		check_options(char **arg)
 	j = 1;
 	while (arg[i] && arg[i][0] == '-')
 	{
+		if (arg[i][1] == '-' && arg[i][2] == '\0')
+			return (i + 1);
 		check_error_options(arg[i]);
 		while (arg[i][j])
 		{

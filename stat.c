@@ -6,20 +6,46 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/29 15:50:49 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/01 12:22:53 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+extern int g_opt_l;
+
 int		disp_if_file(char *arg_name)
 {
 	t_stat	*p_stat;
+	char	*date;
 
 	p_stat = (t_stat *)malloc(sizeof(t_stat));
 	if (stat(arg_name, p_stat) == -1 || S_ISREG(p_stat->st_mode) == 0)
 		return (0);
-	ft_putendl(arg_name);
+	if (g_opt_l == 1)
+	{
+		if ((p_stat->st_mode & 0100000) != 0)
+			ft_putstr("-");
+		else
+			ft_putstr("d");
+		disp_all_rights(p_stat->st_mode);
+		ft_putstr("  ");
+		ft_putnbr(p_stat->st_nlink);
+		ft_putstr(" ");
+		ft_putstr(getpwuid(p_stat->st_uid)->pw_name);
+		ft_putstr("  ");
+		ft_putstr(getgrgid(p_stat->st_gid)->gr_name);
+		ft_putstr("  ");
+		ft_putnbr(p_stat->st_size);
+		ft_putstr(" ");
+		date = ctime(&(p_stat->st_mtimespec.tv_sec)) + 4;
+		date[12] = '\0';
+		ft_putstr(date);
+		ft_putstr(" ");
+		ft_putendl(arg_name);
+	}
+	else
+		ft_putendl(arg_name);
 	free(p_stat);
 	return (1);
 }
