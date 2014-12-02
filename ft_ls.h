@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/01 17:48:30 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 11:06:53 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ int						check_options(char **arg);
 
 void					lst_str_add(t_arglist **begin_list, t_arglist *new);
 void					lst_creat_begin\
-						(t_arglist **begin_list, void *arg_name);
-void					lst_creat_after(t_arglist *list, void *arg_name);
-void					lst_creat_before(t_arglist *list, void *arg_name);
+						(t_arglist **begin_list, char *arg_name);
+void					lst_creat_after(t_arglist *list, char *arg_name);
+void					lst_creat_before(t_arglist *list, char *arg_name);
 t_arglist				*lst_str_new(char *arg_name);
 
 /*
@@ -103,6 +103,7 @@ int						disp_if_file(char *arg_name);
 char					*get_path(char *file_name, char *dir_name);
 void					disp_rights(mode_t rights, int test, char to_disp);
 void					disp_all_rights(mode_t rights);
+void					disp_type_of_file(mode_t mode);
 void					do_opt_l(char *file_name, char *dir_name, t_info nb_spaces);
 
 /*

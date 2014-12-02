@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/01 12:22:53 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 11:03:15 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,11 @@ int		disp_if_file(char *arg_name)
 	char	*date;
 
 	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	if (stat(arg_name, p_stat) == -1 || S_ISREG(p_stat->st_mode) == 0)
+	if (lstat(arg_name, p_stat) == -1 || S_ISDIR(p_stat->st_mode) != 0)
 		return (0);
 	if (g_opt_l == 1)
 	{
-		if ((p_stat->st_mode & 0100000) != 0)
-			ft_putstr("-");
-		else
-			ft_putstr("d");
+		disp_type_of_file(p_stat->st_mode);
 		disp_all_rights(p_stat->st_mode);
 		ft_putstr("  ");
 		ft_putnbr(p_stat->st_nlink);
@@ -52,16 +49,7 @@ int		disp_if_file(char *arg_name)
 
 char	*get_path(char *file_name, char *dir_name)
 {
-	t_stat	*p_stat;
-
-	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	if (stat(dir_name, p_stat) == -1)
-	{
-		perror("stat");
-		exit(EXIT_FAILURE);
-	}
 	dir_name = ft_strjoin(ft_strjoin(dir_name, "/"), file_name);
-	free(p_stat);
 	return (dir_name);
 }
 
@@ -98,21 +86,36 @@ void	right_number_of_spaces(int nb_spaces, char *info)
 	}
 }
 
+void	disp_type_of_file(mode_t mode)
+{
+	if (S_ISREG(mode) != 0)
+		ft_putchar('-');
+	else if (S_ISFIFO(mode) != 0)
+		ft_putchar('p');
+	else if (S_ISDIR(mode) != 0)
+		ft_putchar('d');
+	else if (S_ISLNK(mode) != 0)
+		ft_putchar('l');
+	else if (S_ISCHR(mode) != 0)
+		ft_putchar('c');
+	else if (S_ISBLK(mode) != 0)
+		ft_putchar('b');
+	else
+		ft_putchar('s');
+}
+
 void	do_opt_l(char *file_name, char *dir_name, t_info nb_spaces)
 {
 	t_stat	*p_stat;
 	char	*date;
 
 	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	if (stat(get_path(file_name, dir_name), p_stat) == -1)
+	if (lstat(get_path(file_name, dir_name), p_stat) == -1)
 	{
 		perror("stat");
 		exit(EXIT_FAILURE);
 	}
-	if ((p_stat->st_mode & 0100000) != 0)
-		ft_putstr("-");
-	else
-		ft_putstr("d");
+	disp_type_of_file(p_stat->st_mode);
 	disp_all_rights(p_stat->st_mode);
 	right_number_of_spaces(nb_spaces.nlink, ft_itoa(p_stat->st_nlink));
 	ft_putnbr(p_stat->st_nlink);
