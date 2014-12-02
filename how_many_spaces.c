@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/11/29 15:51:27 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 15:12:45 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,18 @@ t_info	how_many_spaces(t_arglist *file_list, char *dir_name, t_info nb_spaces)
 		if (stat(get_path(file_list->arg_name, dir_name), p_stat) == -1)
 		{
 			perror("ft_ls: stat");
-			exit(EXIT_FAILURE);
+			return (nb_spaces);
 		}
 		if (ft_strlen(ft_itoa(p_stat->st_nlink)) > nb_spaces.nlink)
 			nb_spaces.nlink = ft_strlen(ft_itoa(p_stat->st_nlink));
 		if (ft_strlen(ft_itoa(p_stat->st_size)) > nb_spaces.size)
 			nb_spaces.size = ft_strlen(ft_itoa(p_stat->st_size));
-		if (ft_strlen(getgrgid(p_stat->st_gid)->gr_name) > nb_spaces.gid)
-			nb_spaces.gid = ft_strlen(getgrgid(p_stat->st_gid)->gr_name);
-		if (ft_strlen(getpwuid(p_stat->st_uid)->pw_name) > nb_spaces.uid)
-			nb_spaces.uid = ft_strlen(getpwuid(p_stat->st_uid)->pw_name);
+		if (getgrgid(p_stat->st_gid))
+			if (ft_strlen(getgrgid(p_stat->st_gid)->gr_name) > nb_spaces.gid)
+				nb_spaces.gid = ft_strlen(getgrgid(p_stat->st_gid)->gr_name);
+		if (getpwuid(p_stat->st_uid))
+			if (ft_strlen(getpwuid(p_stat->st_uid)->pw_name) > nb_spaces.uid)
+				nb_spaces.uid = ft_strlen(getpwuid(p_stat->st_uid)->pw_name);
 		file_list = file_list->next;
 	}
 	return (nb_spaces);

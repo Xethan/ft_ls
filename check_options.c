@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/01 10:55:44 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 16:11:35 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,21 @@ void	get_options(char c)
 {
 	if (c == 'R')
 		g_opt_r_caps = 1;
-	if (c == 'a')
+	else if (c == 'a')
 		g_opt_a = 1;
-	if (c == 'l')
+	else if (c == 'l')
 		g_opt_l = 1;
-	if (c == 'r')
+	else if (c == 'r')
 		g_opt_r = 1;
-	if (c == 't')
+	else if (c == 't')
 		g_opt_t = 1;
+	else
+	{
+		ft_putstr_fd("ft_ls: illegal option -- ", 2);
+		ft_putchar_fd(c, 2);
+		ft_putstr_fd("\nusage: ./ft_ls [-Ralrt] [file ...]\n", 2);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int		check_options(char **arg)
@@ -43,7 +50,6 @@ int		check_options(char **arg)
 	{
 		if (arg[i][1] == '-' && arg[i][2] == '\0')
 			return (i + 1);
-		check_error_options(arg[i]);
 		while (arg[i][j])
 		{
 			get_options(arg[i][j]);

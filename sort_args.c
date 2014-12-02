@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/01 17:52:28 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 11:14:54 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ t_arglist	*put_arg_into_list(t_arglist **begin_list, char *arg)
 				list = list->next;
 			lst_creat_after(list, arg);
 		}
-		//lst_creat_before(list, arg);
 	}
 	return (*begin_list);
 }

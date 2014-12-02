@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 11:09:53 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/02 11:09:51 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 14:06:48 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,15 @@ void		lst_creat_after(t_arglist *list, char *arg_name)
 		return ;
 	new->next = list->next;
 	new->previous = list;
-	list->next->previous = new;
+	if (list->next)
+		list->next->previous = new;
 	list->next = new;
 }
 
-void		lst_creat_before(t_arglist *list, char *arg_name)
+/*void		lstdel
 {
-	t_arglist	*new;
 
-	if ((new = lst_str_new(arg_name)) == NULL)
-		return ;
-	new->next = list;
-	new->previous = list->previous;
-	list->previous->next = new;
-	list->previous = new;
-}
+}*/
 
 void		lst_creat_begin(t_arglist **begin_list, char *arg_name)
 {

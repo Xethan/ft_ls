@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/01 17:34:52 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 15:50:55 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		g_opt_t = 0;
 
 void		disp_if_needed(char *file_name, char *dir_name, t_info nb_spaces)
 {
-	if (file_name[0] == '.' && g_opt_a == 0)
+	if ((file_name[0] == '.' || (ft_strrchr(dir_name, '/') && *(ft_strrchr(dir_name, '/') + 1) == '.')) && g_opt_a == 0)
 		return ;
 	if (g_opt_l == 1)
 		do_opt_l(file_name, dir_name, nb_spaces);
@@ -75,8 +75,12 @@ int			opendir_and_list(char *dir_name, int disp_name)
 	}
 	if (disp_name == NAME)
 	{
-		ft_putstr(dir_name);
-		ft_putstr(":\n");
+		if (g_opt_a == 1 || !ft_strrchr(dir_name, '.') || *(ft_strrchr(dir_name, '.') - 1) != '/')
+		{
+			ft_putstr("\n");
+			ft_putstr(dir_name);
+			ft_putstr(":\n");
+		}
 	}
 	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
 	*begin_list = readdir_and_sort_files(p_dir);
@@ -97,15 +101,12 @@ int			opendir_and_list(char *dir_name, int disp_name)
 			if (stat(get_path(file_list->arg_name, dir_name), p_stat) == -1)
 			{
 				perror("stat");
-				exit(EXIT_FAILURE);
+				return (0);
 			}
 			if ((p_stat->st_mode & 0040000) != 0
 					&& ft_strequ(file_list->arg_name, ".") == 0
 					&& ft_strequ(file_list->arg_name, "..") == 0)
-			{
-				ft_putchar('\n');
 				opendir_and_list(ft_strjoin(ft_strjoin(dir_name, "/"), file_list->arg_name), NAME);
-			}
 			file_list = file_list->next;
 			free(p_stat);
 		}
@@ -132,8 +133,6 @@ void		ft_ls(int argc, char **argv)
 		while (list)
 		{
 			opendir_and_list(list->arg_name, NAME);
-			if (list->next)
-				ft_putstr("\n");
 			list = list->next;
 		}
 	}

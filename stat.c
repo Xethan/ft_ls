@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/02 11:03:15 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/02 15:11:41 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ int		disp_if_file(char *arg_name)
 		ft_putstr("  ");
 		ft_putnbr(p_stat->st_nlink);
 		ft_putstr(" ");
-		ft_putstr(getpwuid(p_stat->st_uid)->pw_name);
+		if (getpwuid(p_stat->st_uid))
+			ft_putstr(getpwuid(p_stat->st_uid)->pw_name);
 		ft_putstr("  ");
-		ft_putstr(getgrgid(p_stat->st_gid)->gr_name);
+		if (getgrgid(p_stat->st_gid))
+			ft_putstr(getgrgid(p_stat->st_gid)->gr_name);
 		ft_putstr("  ");
 		ft_putnbr(p_stat->st_size);
 		ft_putstr(" ");
@@ -113,17 +115,20 @@ void	do_opt_l(char *file_name, char *dir_name, t_info nb_spaces)
 	if (lstat(get_path(file_name, dir_name), p_stat) == -1)
 	{
 		perror("stat");
-		exit(EXIT_FAILURE);
+		return ;
 	}
 	disp_type_of_file(p_stat->st_mode);
 	disp_all_rights(p_stat->st_mode);
 	right_number_of_spaces(nb_spaces.nlink, ft_itoa(p_stat->st_nlink));
 	ft_putnbr(p_stat->st_nlink);
 	ft_putstr(" ");
-	ft_putstr(getpwuid(p_stat->st_uid)->pw_name);
-	right_number_of_spaces(nb_spaces.uid, getpwuid(p_stat->st_uid)->pw_name);
-	ft_putstr(getgrgid(p_stat->st_gid)->gr_name);
-	right_number_of_spaces(nb_spaces.gid - 2, getgrgid(p_stat->st_gid)->gr_name);
+	if (getpwuid(p_stat->st_uid) && getgrgid(p_stat->st_gid))
+	{
+		ft_putstr(getpwuid(p_stat->st_uid)->pw_name);
+		right_number_of_spaces(nb_spaces.uid, getpwuid(p_stat->st_uid)->pw_name);
+		ft_putstr(getgrgid(p_stat->st_gid)->gr_name);
+		right_number_of_spaces(nb_spaces.gid - 2, getgrgid(p_stat->st_gid)->gr_name);
+	}
 	right_number_of_spaces(nb_spaces.size, ft_itoa(p_stat->st_size));
 	ft_putnbr(p_stat->st_size);
 	ft_putstr(" ");
