@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/02 11:14:54 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 12:39:48 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ extern int g_opt_r;
 t_arglist	*put_arg_into_list(t_arglist **begin_list, char *arg)
 {
 	t_arglist	*list;
-	t_arglist	*cpy;
+	//t_arglist	*cpy; Pas d'erreur de free avec :o !
 
 	list = *begin_list;
-	if (list->arg_name == NULL)
+	if (list == NULL)
 	{
-		cpy = *begin_list;
+		//cpy = *begin_list;
 		*begin_list = lst_str_new(arg);
-		free(cpy);
+		//free(cpy);
 	}
 	else
 	{
@@ -40,21 +40,16 @@ t_arglist	*put_arg_into_list(t_arglist **begin_list, char *arg)
 	return (*begin_list);
 }
 
-t_arglist	*reverse_and_join(t_arglist *error, t_arglist *file, t_arglist *dir)
+t_arglist	*reverse_and_disp_files(t_arglist *file, t_arglist *dir)
 {
-	if (g_opt_r == 1)
-		file = reverse_list(&file);
-	if (g_opt_r == 1)
-		dir = reverse_list(&dir);
-	if (file->arg_name == NULL)
-		file = dir;
-	else
-		file = lstjoin(file, dir);
-	if (error->arg_name == NULL)
-		error = file;
-	else
-		error = lstjoin(error, file);
-	return (error);	
+	if (file)
+		if (g_opt_r == 1)
+			file = reverse_list(&file);
+	if (dir)
+		if (g_opt_r == 1)
+			dir = reverse_list(&dir);
+	disp_if_needed(file, "./");
+	return (dir);
 }
 
 t_arglist	*create_list_from_argv(char **arg, int i)
@@ -62,25 +57,27 @@ t_arglist	*create_list_from_argv(char **arg, int i)
 	t_stat		*p_stat;
 	t_arglist	*dir_list;
 	t_arglist	*file_list;
-	t_arglist	*error_list;
 
-	error_list = lst_str_new(NULL);
-	file_list = lst_str_new(NULL);
-	dir_list = lst_str_new(NULL);
+	file_list = NULL;
+	dir_list = NULL;
 	while (arg[i])
 	{
 		p_stat = (t_stat *)malloc(sizeof(t_stat));
 		//test malloc
 		if (stat(arg[i], p_stat) == -1)
-				error_list = put_arg_into_list(&error_list, arg[i]);
-		else if (S_ISREG(p_stat->st_mode) != 0)
-				file_list = put_arg_into_list(&file_list, arg[i]);
+		{
+			ft_putstr_fd("./ft_ls: ", 2);
+			ft_putstr_fd(arg[i], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
 		else if (S_ISDIR(p_stat->st_mode) != 0)
-				dir_list = put_arg_into_list(&dir_list, arg[i]);
+			dir_list = put_arg_into_list(&dir_list, arg[i]);
+		else
+			file_list = put_arg_into_list(&file_list, arg[i]);
 		i++;
 		free(p_stat);
 	}
-	dir_list = reverse_and_join(error_list, file_list, dir_list);
+	dir_list = reverse_and_disp_files(file_list, dir_list);
 	return (dir_list);
 }
 

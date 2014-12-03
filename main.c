@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/02 15:50:55 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 13:03:03 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,23 @@ int		g_opt_l = 0;
 int		g_opt_r = 0;
 int		g_opt_t = 0;
 
-void		disp_if_needed(char *file_name, char *dir_name, t_info nb_spaces)
+void		disp_if_needed(t_arglist *file_list, char *dir_name)
 {
-	if ((file_name[0] == '.' || (ft_strrchr(dir_name, '/') && *(ft_strrchr(dir_name, '/') + 1) == '.')) && g_opt_a == 0)
-		return ;
-	if (g_opt_l == 1)
-		do_opt_l(file_name, dir_name, nb_spaces);
-	else
-		ft_putendl(file_name);
+	t_info nb_spaces;
+
+	nb_spaces = init_info_to_zero(nb_spaces);
+	nb_spaces = how_many_spaces(file_list, dir_name, nb_spaces);
+	while (file_list)
+	{
+		if (show_or_not_file(file_list->arg_name, dir_name) == 1)
+		{
+			if (g_opt_l == 1)
+				do_opt_l(file_list->arg_name, dir_name, nb_spaces);
+			else
+				ft_putendl(file_list->arg_name);
+		}
+		file_list = file_list->next;
+	}
 }
 
 t_arglist	*readdir_and_sort_files(DIR *p_dir)
@@ -57,16 +66,32 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir)
 	return (list);
 }
 
+void		do_opt_r_caps(t_arglist *file_list, char *dir_name)
+{
+	t_stat		*p_stat;
+
+	while (file_list)
+	{
+		p_stat = (t_stat *)malloc(sizeof(t_stat));
+		if (stat(get_path(file_list->arg_name, dir_name), p_stat) == -1)
+		{
+			perror("stat");
+			return ;
+		}
+		if ((p_stat->st_mode & 0040000) != 0
+				&& ft_strequ(file_list->arg_name, ".") == 0
+				&& ft_strequ(file_list->arg_name, "..") == 0)
+			opendir_and_list(ft_strjoin(ft_strjoin(dir_name, "/"), file_list->arg_name), NAME);
+		file_list = file_list->next;
+		free(p_stat);
+	}
+}
+
 int			opendir_and_list(char *dir_name, int disp_name)
 {
 	DIR			*p_dir;
-	t_arglist	**begin_list;
 	t_arglist	*file_list;
-	t_info		nb_spaces;
-	t_stat		*p_stat;
 
-	if (disp_if_file(dir_name) == 1)
-		return (1);
 	if ((p_dir = opendir(dir_name)) == NULL)
 	{
 		ft_putstr_fd("ft_ls: ", 2);
@@ -75,47 +100,23 @@ int			opendir_and_list(char *dir_name, int disp_name)
 	}
 	if (disp_name == NAME)
 	{
-		if (g_opt_a == 1 || !ft_strrchr(dir_name, '.') || *(ft_strrchr(dir_name, '.') - 1) != '/')
+		if (show_or_not_dir(dir_name) == 1)
 		{
 			ft_putstr("\n");
 			ft_putstr(dir_name);
 			ft_putstr(":\n");
 		}
 	}
-	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
-	*begin_list = readdir_and_sort_files(p_dir);
-	file_list = *begin_list;
-	nb_spaces = init_info_to_zero(nb_spaces);
-	nb_spaces = how_many_spaces(file_list, dir_name, nb_spaces);
-	while (file_list)
-	{
-		disp_if_needed(file_list->arg_name, dir_name, nb_spaces);
-		file_list = file_list->next;
-	}
+	file_list = (t_arglist *)malloc(sizeof(t_arglist));
+	file_list = readdir_and_sort_files(p_dir);
+	disp_if_needed(file_list, dir_name);
 	if (g_opt_r_caps == 1)
-	{
-		file_list = *begin_list;
-		while (file_list)
-		{
-			p_stat = (t_stat *)malloc(sizeof(t_stat));
-			if (stat(get_path(file_list->arg_name, dir_name), p_stat) == -1)
-			{
-				perror("stat");
-				return (0);
-			}
-			if ((p_stat->st_mode & 0040000) != 0
-					&& ft_strequ(file_list->arg_name, ".") == 0
-					&& ft_strequ(file_list->arg_name, "..") == 0)
-				opendir_and_list(ft_strjoin(ft_strjoin(dir_name, "/"), file_list->arg_name), NAME);
-			file_list = file_list->next;
-			free(p_stat);
-		}
-	}
+		do_opt_r_caps(file_list, dir_name);
 	closedir(p_dir);
 	return (1);
 }
 
-void		ft_ls(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	int			i;
 	t_arglist	*list;
@@ -137,10 +138,5 @@ void		ft_ls(int argc, char **argv)
 		}
 	}
 	//ft_lstdel(&list);
-}
-
-int			main(int argc, char **argv)
-{
-	ft_ls(argc, argv);
 	return (0);
 }

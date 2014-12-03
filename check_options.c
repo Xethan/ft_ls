@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/02 16:11:35 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 13:05:51 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,36 @@ extern int g_opt_a;
 extern int g_opt_l;
 extern int g_opt_r;
 extern int g_opt_t;
+
+int		show_or_not_file(char *file_name, char *dir_name)
+{
+	if (g_opt_a == 1)
+		return (1);
+	if (file_name[0] != '.')
+	{
+		if (g_opt_r_caps == 1)
+		{
+			if (!ft_strrchr(dir_name, '/') && dir_name[0] == '.')
+				return (0);
+			if (ft_strrchr(dir_name, '/')
+				&& *(ft_strrchr(dir_name, '/') + 1) == '.')
+				return (0);
+		}
+		return (1);
+	}
+	return (0);
+}
+
+int		show_or_not_dir(char *dir_name)
+{
+	if (g_opt_a == 1 || g_opt_r_caps == 0)
+		return (1);
+	if (dir_name[0] != '.' && !ft_strrchr(dir_name, '/'))
+		return (1);
+	if (ft_strrchr(dir_name, '/') && *(ft_strrchr(dir_name, '/') + 1) != '.')
+		return (1);
+	return (0);
+}
 
 void	get_options(char c)
 {
