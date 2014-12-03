@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 13:03:03 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 16:42:04 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void		disp_if_needed(t_arglist *file_list, char *dir_name)
 	}
 }
 
-t_arglist	*readdir_and_sort_files(DIR *p_dir)
+t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 {
 	t_dirent	*s_dir;
 	t_arglist	**begin_list;
@@ -50,19 +50,16 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir)
 	while ((s_dir = readdir(p_dir)) != NULL)
 	{
 		list = *begin_list;
-		if (ft_strcmp(s_dir->d_name, list->arg_name) < 0)
+		if (cmp_args(get_path(dir_name, s_dir->d_name), get_path(dir_name, list->arg_name)) < 0)
 			lst_creat_begin(begin_list, s_dir->d_name);
 		else
 		{
-			while (list->next && ft_strcmp(s_dir->d_name, list->next->arg_name) > 0)
+			while (list->next && cmp_args(get_path(dir_name, s_dir->d_name), get_path(dir_name, list->next->arg_name)) > 0)
 				list = list->next;
 			lst_creat_after(list, s_dir->d_name);
 		}
 	}
-	if (g_opt_r == 1)
-		list = reverse_list(begin_list);
-	else
-		list = *begin_list;
+	list = *begin_list;
 	return (list);
 }
 
@@ -73,15 +70,19 @@ void		do_opt_r_caps(t_arglist *file_list, char *dir_name)
 	while (file_list)
 	{
 		p_stat = (t_stat *)malloc(sizeof(t_stat));
-		if (stat(get_path(file_list->arg_name, dir_name), p_stat) == -1)
+		if (lstat(get_path(dir_name, file_list->arg_name), p_stat) == -1)
 		{
 			perror("stat");
 			return ;
 		}
-		if ((p_stat->st_mode & 0040000) != 0
-				&& ft_strequ(file_list->arg_name, ".") == 0
-				&& ft_strequ(file_list->arg_name, "..") == 0)
-			opendir_and_list(ft_strjoin(ft_strjoin(dir_name, "/"), file_list->arg_name), NAME);
+		if (S_ISDIR(p_stat->st_mode) != 0
+			&& ft_strequ(file_list->arg_name, ".") == 0
+			&& ft_strequ(file_list->arg_name, "..") == 0)
+		{
+			if (show_or_not_dir(get_path(dir_name, file_list->arg_name)) == 1)
+				ft_putchar('\n');
+			opendir_and_list(get_path(dir_name, file_list->arg_name), NAME);
+		}
 		file_list = file_list->next;
 		free(p_stat);
 	}
@@ -94,6 +95,11 @@ int			opendir_and_list(char *dir_name, int disp_name)
 
 	if ((p_dir = opendir(dir_name)) == NULL)
 	{
+		if (disp_name == NAME)
+		{
+			ft_putstr_fd(dir_name, 2);
+			ft_putstr_fd(":\n", 2);
+		}
 		ft_putstr_fd("ft_ls: ", 2);
 		perror(dir_name);
 		return (0);
@@ -102,13 +108,12 @@ int			opendir_and_list(char *dir_name, int disp_name)
 	{
 		if (show_or_not_dir(dir_name) == 1)
 		{
-			ft_putstr("\n");
 			ft_putstr(dir_name);
 			ft_putstr(":\n");
 		}
 	}
 	file_list = (t_arglist *)malloc(sizeof(t_arglist));
-	file_list = readdir_and_sort_files(p_dir);
+	file_list = readdir_and_sort_files(p_dir, dir_name);
 	disp_if_needed(file_list, dir_name);
 	if (g_opt_r_caps == 1)
 		do_opt_r_caps(file_list, dir_name);
@@ -127,14 +132,15 @@ int			main(int argc, char **argv)
 	list = sort_args(argv);
 	if (argc == i)
 		opendir_and_list(".", NO_NAME);
-	else if (argc == i + 1)
-		opendir_and_list(list->arg_name, NO_NAME);
+	else if (argc == i + 1 && list)
+			opendir_and_list(list->arg_name, NO_NAME);
 	else if (argc > i + 1)
 	{
 		while (list)
 		{
 			opendir_and_list(list->arg_name, NAME);
-			list = list->next;
+			if ((list = list->next))
+				ft_putchar('\n');
 		}
 	}
 	//ft_lstdel(&list);

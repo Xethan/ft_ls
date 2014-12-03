@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 11:04:59 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 16:41:56 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		disp_if_file(char *arg_name)
 	return (1);
 }
 
-char	*get_path(char *file_name, char *dir_name)
+char	*get_path(char *dir_name, char *file_name)
 {
 	dir_name = ft_strjoin(ft_strjoin(dir_name, "/"), file_name);
 	return (dir_name);
@@ -61,7 +61,7 @@ void	do_opt_l(char *file_name, char *dir_name, t_info nb_spaces)
 	char	*date;
 
 	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	if (lstat(get_path(file_name, dir_name), p_stat) == -1)
+	if (lstat(get_path(dir_name, file_name), p_stat) == -1)
 	{
 		perror("stat");
 		return ;
@@ -94,9 +94,14 @@ void	do_opt_l(char *file_name, char *dir_name, t_info nb_spaces)
 	right_number_of_spaces(nb_spaces.size, ft_itoa(p_stat->st_size));
 	ft_putnbr(p_stat->st_size);
 	ft_putstr(" ");
-	date = ctime(&(p_stat->st_mtimespec.tv_sec)) + 4;
-	date[12] = '\0';
-	ft_putstr(date);
+	date = ctime(&(p_stat->st_mtimespec.tv_sec));
+	if (p_stat->st_mtimespec.tv_sec < time(NULL) - 15778800 || p_stat->st_mtimespec.tv_sec > time(NULL))
+	{
+		write(1, date + 4, 7);
+		write(1, date + 19, 5);
+	}
+	else
+		write(1, date + 4, 12);
 	ft_putstr(" ");
 	ft_putstr(file_name);
 	if (S_ISLNK(p_stat->st_mode) != 0)

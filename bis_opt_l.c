@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 16:56:48 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 11:59:46 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 15:03:25 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ void	disp_link(char *file_name, char *dir_name)
 	char	*link;
 
 	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	if (lstat(ft_strjoin(ft_strjoin(dir_name, "/"), file_name), p_stat) == -1)
+	if (lstat(get_path(dir_name, file_name), p_stat) == -1)
 	{
 		perror("stat");
 		return ;
 	}
 	link = (char *)malloc(p_stat->st_size * sizeof(char));
-	readlink(ft_strjoin(ft_strjoin(dir_name, "/"), file_name), link, p_stat->st_size);
+	readlink(get_path(dir_name, file_name), link, p_stat->st_size);
 	ft_putstr(" -> ");
 	ft_putstr(link);
 	free(p_stat);

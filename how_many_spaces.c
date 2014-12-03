@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/02 15:12:45 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 15:17:38 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_info	how_many_spaces(t_arglist *file_list, char *dir_name, t_info nb_spaces)
 	while (file_list)
 	{
 		p_stat = (struct stat *)malloc(sizeof(struct stat));
-		if (stat(get_path(file_list->arg_name, dir_name), p_stat) == -1)
+		if (lstat(get_path(dir_name, file_list->arg_name), p_stat) == -1)
 		{
 			perror("ft_ls: stat");
 			return (nb_spaces);

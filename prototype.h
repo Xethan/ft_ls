@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 11:17:15 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 13:02:32 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/03 16:41:47 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 */
 
 void		disp_if_needed(t_arglist *file_list, char *dir_name);
-t_arglist	*readdir_and_sort_files(DIR *p_dir);
+t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name);
 void		do_opt_r_caps(t_arglist *file_list, char *dir_name);
 int			opendir_and_list(char *dir_name, int disp_name_dir);
 
@@ -36,33 +36,27 @@ int			check_options(char **arg);
 **       HANDLE_LIST.C :
 */
 
+t_arglist	*lstjoin(t_arglist *lst1, t_arglist *lst2);
 void		lst_str_add(t_arglist **begin_list, t_arglist *new);
 void		lst_creat_begin(t_arglist **begin_list, char *arg_name);
 void		lst_creat_after(t_arglist *list, char *arg_name);
 t_arglist	*lst_str_new(char *arg_name);
 
 /*
-**       HANDLE_LIST_2.C :
-*/
-
-t_arglist	*reverse_list(t_arglist **begin_list);
-t_arglist	*lstjoin(t_arglist *lst1, t_arglist *lst2);
-
-/*
 **       SORT_ARGS.C :
 */
 
 t_arglist	*sort_args(char **arg);
-t_arglist	*reverse_and_disp_files(t_arglist *file, t_arglist *dir);
 t_arglist	*create_list_from_argv(char **arg, int i);
 t_arglist	*put_arg_into_list(t_arglist **begin_list, char *arg);
+int			cmp_args(char *arg1, char *arg2);
 
 /*
 **       STAT.C :
 */
 
 int			disp_if_file(char *arg_name);
-char		*get_path(char *file_name, char *dir_name);
+char		*get_path(char *dir_name, char *file_name);
 void		do_opt_l(char *file_name, char *dir_name, t_info nb_spaces);
 
 /*
