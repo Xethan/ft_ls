@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/04 15:24:15 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:32:49 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_info	how_many_spaces(t_arglist *file_list, char *dir_name, t_info nb_spaces)
 			ft_putnbr(total);
 			ft_putchar('\n');
 		}
+		free(p_stat);
 	}
 	return (nb_spaces);
 }

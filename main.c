@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/04 17:21:44 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:34:12 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int			opendir_and_list(char *dir_name, int disp_name)
 	if (g_opt_r_caps == 1)
 		do_opt_r_caps(file_list, dir_name);
 	closedir(p_dir);
+	lst_str_del(&file_list);
 	return (1);
 }
 
@@ -144,6 +145,6 @@ int			main(int argc, char **argv)
 				ft_putchar('\n');
 		}
 	}
-	//ft_lstdel(&list);
+	lst_str_del(&list);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 16:41:58 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:35:23 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ t_arglist	*create_list_from_argv(char **arg, int i)
 	while (arg[i])
 	{
 		p_stat = (t_stat *)malloc(sizeof(t_stat));
-		//test malloc
+		if (p_stat == NULL)
+			exit(EXIT_FAILURE);
 		if (lstat(arg[i], p_stat) == -1)
 		{
 			ft_putstr_fd("./ft_ls: ", 2);

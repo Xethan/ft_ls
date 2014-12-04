@@ -6,23 +6,11 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 11:09:53 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 16:41:43 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:28:37 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-t_arglist	*lstjoin(t_arglist *lst1, t_arglist *lst2)
-{
-	t_arglist	*p_list;
-
-	p_list = lst1;
-	while (p_list->next)
-		p_list = p_list->next;
-	p_list->next = lst2;
-	p_list->next->previous = p_list;
-	return (lst1);
-}
 
 void		lst_str_add(t_arglist **begin_list, t_arglist *new)
 {
@@ -63,10 +51,20 @@ void		lst_creat_after(t_arglist *list, char *arg_name)
 	list->next = new;
 }
 
-/*void		lstdel
+void		lst_str_del(t_arglist **begin_list)
 {
+	t_arglist	*p_list;
+	t_arglist	*cpy;
 
-}*/
+	p_list = *begin_list;
+	while (p_list)
+	{
+		free(p_list->arg_name);
+		cpy = p_list;
+		p_list = p_list->next;
+		free(cpy);
+	}
+}
 
 void		lst_creat_begin(t_arglist **begin_list, char *arg_name)
 {

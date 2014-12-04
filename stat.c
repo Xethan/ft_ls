@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/04 14:53:54 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:37:54 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,12 @@ int		disp_if_file(char *arg_name)
 
 char	*get_path(char *dir_name, char *file_name)
 {
-	dir_name = ft_strjoin(ft_strjoin(dir_name, "/"), file_name);
+	char	*cpy;
+
+	dir_name = ft_strjoin(dir_name, "/");
+	cpy = dir_name;
+	dir_name = ft_strjoin(dir_name, file_name);
+	free(cpy);
 	return (dir_name);
 }
 

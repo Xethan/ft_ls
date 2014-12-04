@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 11:17:15 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 16:41:47 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:28:51 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,17 @@ int			opendir_and_list(char *dir_name, int disp_name_dir);
 
 int			show_or_not_file(char *file_name, char *dir_name);
 int			show_or_not_dir(char *dir_name);
+void		get_options(char c);
 int			check_options(char **arg);
 
 /*
 **       HANDLE_LIST.C :
 */
 
-t_arglist	*lstjoin(t_arglist *lst1, t_arglist *lst2);
 void		lst_str_add(t_arglist **begin_list, t_arglist *new);
 void		lst_creat_begin(t_arglist **begin_list, char *arg_name);
 void		lst_creat_after(t_arglist *list, char *arg_name);
+void		lst_str_del(t_arglist **begin_list);
 t_arglist	*lst_str_new(char *arg_name);
 
 /*
