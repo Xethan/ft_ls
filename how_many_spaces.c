@@ -6,11 +6,13 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 15:17:38 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 15:24:15 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+extern int g_opt_l;
 
 t_info	init_info_to_zero(t_info nb_spaces)
 {
@@ -24,7 +26,9 @@ t_info	init_info_to_zero(t_info nb_spaces)
 t_info	how_many_spaces(t_arglist *file_list, char *dir_name, t_info nb_spaces)
 {
 	struct stat	*p_stat;
+	int			total;
 
+	total = 0;
 	while (file_list)
 	{
 		p_stat = (struct stat *)malloc(sizeof(struct stat));
@@ -43,7 +47,15 @@ t_info	how_many_spaces(t_arglist *file_list, char *dir_name, t_info nb_spaces)
 		if (getpwuid(p_stat->st_uid))
 			if (ft_strlen(getpwuid(p_stat->st_uid)->pw_name) > nb_spaces.uid)
 				nb_spaces.uid = ft_strlen(getpwuid(p_stat->st_uid)->pw_name);
+		if (show_or_not_file(file_list->arg_name, dir_name) == 1)
+			total += p_stat->st_blocks;
 		file_list = file_list->next;
+		if (!file_list && g_opt_l == 1 && show_or_not_dir(dir_name) == 1)
+		{
+			ft_putstr("total ");
+			ft_putnbr(total);
+			ft_putchar('\n');
+		}
 	}
 	return (nb_spaces);
 }

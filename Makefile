@@ -6,9 +6,10 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/19 16:01:28 by ncolliau          #+#    #+#              #
-#    Updated: 2014/12/03 16:41:39 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/04 17:17:30 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME = ft_ls
 
@@ -17,16 +18,27 @@ SRC =	main.c check_options.c sort_args.c handle_list.c stat.c \
 
 OBJ = $(SRC:.c=.o)
 
-all : $(NAME)
+PATH_INCLUDES = ./libft/includes
 
-$(NAME) :
-			make -C libft/ re
+FLAGS = -Wall -Wextra -Werror
+
+.PHONY: all, make_libft, clean, fclean, re, norme
+
+.SUFFIXES:
+
+all : make_libft $(NAME)
+
+$(NAME) : $(SRC)
+			gcc $(FLAGS) -I $(PATH_INCLUDES) -c $(SRC)
+			gcc $(FLAGS) -o $(NAME) $(OBJ) libft/libft.a
+
+make_libft :
+			make -C libft/
 			make -C libft/ clean
-			gcc -Wall -Wextra -Werror -o $(NAME) \
-			-I ./ -I ./libft/includes $(SRC) libft/libft.a
 
 clean :
-			rm -f $(OBJ)
+			@rm -f $(OBJ)
+			@echo "clean done"
 
 fclean : clean
 			rm -f $(NAME)

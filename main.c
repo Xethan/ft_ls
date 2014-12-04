@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 16:42:04 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/04 17:21:44 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 	t_arglist	*list;
 
 	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
-	//test malloc
+	if (begin_list == NULL)
+		exit(EXIT_FAILURE);
 	if ((s_dir = readdir(p_dir)) != NULL)
 		*begin_list = lst_str_new(s_dir->d_name);
 	while ((s_dir = readdir(p_dir)) != NULL)

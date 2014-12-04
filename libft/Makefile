@@ -6,7 +6,7 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/07 15:24:29 by ncolliau          #+#    #+#              #
-#    Updated: 2014/11/22 11:38:39 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/04 17:13:19 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,32 +27,30 @@ SRC =	ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 
 OBJ =	$(SRC:.c=.o)
 
+PATH_INCLUDE = ./includes
+
+FLAGS = -Wall -Wextra -Werror
+
+.PHONY: all, $(NAME), clean, fclean, re, norme
+
+.SUFFIXES:
+
 all : $(NAME)
 
-$(NAME) :
-		gcc -Wall -Wextra -Werror -c $(SRC) -I ./includes/
-		ar rc $(NAME) $(OBJ)
-		ranlib $(NAME)
-
-gcc :
-		gcc -Wall -Wextra -Werror -c $(SRC) -I ./includes/
+$(NAME) : $(SRC)
+		@gcc $(FLAGS) -I $(PATH_INCLUDE) -c $(SRC)
+		@echo "libft compiled"
 		ar rc $(NAME) $(OBJ)
 		ranlib $(NAME)
 
 clean :
-		rm -f $(OBJ)
+		@echo "clean done"
+		@rm -f $(OBJ)
 
 fclean : clean
 		rm -f $(NAME)
 
 re : fclean all
 
-clear :
-		clear
-
-gcc_clean : gcc clean clear
-
 norme :
 		norminette $(SRC) libft.h
-
-clear_norme : clear norme
