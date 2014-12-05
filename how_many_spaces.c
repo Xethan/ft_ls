@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 15:06:43 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 17:29:17 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,49 +34,40 @@ int		count_spaces(int info, size_t max_length)
 	return (max_length);
 }
 
-t_info	how_many_spaces(t_arglist *file_list, char *dir_name, t_info length)
+t_info	how_many_spaces(t_filelist *f_list, t_info length)
 {
-	t_stat	*p_stat;
-	char	*path;
 	int		total;
+	char	*dir_name;
 
 	total = 0;
-	while (file_list)
+	dir_name = f_list->dir_name;
+	while (f_list)
 	{
-		path = get_path(dir_name, file_list->arg_name);
-		p_stat = (struct stat *)malloc(sizeof(struct stat));
-		if (lstat(path, p_stat) == -1)
+		length.nlink = count_spaces(f_list->st->st_nlink, length.nlink);
+		length.size = count_spaces(f_list->st->st_size, length.size);
+		if (getgrgid(f_list->st->st_gid))
 		{
-			perror("ft_ls: stat");
-			return (length);
-		}
-		length.nlink = count_spaces(p_stat->st_nlink, length.nlink);
-		length.size = count_spaces(p_stat->st_size, length.size);
-		if (getgrgid(p_stat->st_gid))
-		{
-			if (ft_strlen(getgrgid(p_stat->st_gid)->gr_name) > length.gid)
-				length.gid = ft_strlen(getgrgid(p_stat->st_gid)->gr_name);
+			if (ft_strlen(getgrgid(f_list->st->st_gid)->gr_name) > length.gid)
+				length.gid = ft_strlen(getgrgid(f_list->st->st_gid)->gr_name);
 		}
 		else
-			length.gid = count_spaces(p_stat->st_gid, length.gid);
-		if (getpwuid(p_stat->st_uid))
+			length.gid = count_spaces(f_list->st->st_gid, length.gid);
+		if (getpwuid(f_list->st->st_uid))
 		{
-			if (ft_strlen(getpwuid(p_stat->st_uid)->pw_name) > length.uid)
-				length.uid = ft_strlen(getpwuid(p_stat->st_uid)->pw_name);
+			if (ft_strlen(getpwuid(f_list->st->st_uid)->pw_name) > length.uid)
+				length.uid = ft_strlen(getpwuid(f_list->st->st_uid)->pw_name);
 		}
 		else
-			length.uid = count_spaces(p_stat->st_uid, length.uid);
-		if (show_or_not_file(file_list->arg_name, dir_name) == 1)
-			total += p_stat->st_blocks;
-		file_list = file_list->next;
-		if (!file_list && g_opt_l == 1 && show_or_not_dir(dir_name) == 1)
+			length.uid = count_spaces(f_list->st->st_uid, length.uid);
+		if (show_or_not_file(f_list->name, dir_name) == 1)
+			total += f_list->st->st_blocks;
+		f_list = f_list->next;
+		if (!f_list && g_opt_l == 1 && show_or_not_dir(dir_name) == 1)
 		{
 			ft_putstr("total ");
 			ft_putnbr(total);
 			ft_putchar('\n');
 		}
-		free(path);
-		free(p_stat);
 	}
 	return (length);
 }

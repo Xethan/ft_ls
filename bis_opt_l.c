@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 16:56:48 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 14:59:26 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 16:58:47 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,13 @@ void	disp_type_of_file(mode_t mode)
 		ft_putchar('s');
 }
 
-void	disp_link(char *file_name, char *dir_name)
+void	disp_link(t_filelist *f_list)
 {
-	t_stat	*p_stat;
-	char	*path;
 	char	*link;
 
-	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	path = get_path(dir_name, file_name);
-	if (lstat(path, p_stat) == -1)
-	{
-		perror("stat");
-		return ;
-	}
-	link = (char *)malloc(p_stat->st_size * sizeof(char));
-	readlink(path, link, p_stat->st_size);
+	link = (char *)malloc(f_list->st->st_size * sizeof(char));
+	readlink(f_list->path, link, f_list->st->st_size);
 	ft_putstr(" -> ");
 	ft_putstr(link);
-	free(path);
-	free(p_stat);
 	free(link);
 }

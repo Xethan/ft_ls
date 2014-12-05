@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 16:42:00 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 16:09:35 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ extern int g_opt_a;
 extern int g_opt_l;
 extern int g_opt_r;
 extern int g_opt_t;
+
+void	*malloc_me(size_t size)
+{
+	void	*content;
+
+	content = malloc(size);
+	if (content == NULL)
+		exit(EXIT_FAILURE);
+	return (content);
+}
 
 int		show_or_not_file(char *file_name, char *dir_name)
 {

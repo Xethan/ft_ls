@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/04 17:35:23 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 17:32:08 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,32 +49,53 @@ int			cmp_args(char *arg1, char *arg2)
 	return (ft_strcmp(arg1, arg2));
 }
 
-t_arglist	*put_arg_into_list(t_arglist **begin_list, char *arg)
+t_dirlist	*put_arg_into_list(t_dirlist **begin_list, char *arg)
 {
-	t_arglist	*list;
+	t_dirlist	*list;
 
 	list = *begin_list;
 	if (list == NULL)
-		*begin_list = lst_str_new(arg);
+		*begin_list = d_lstnew(arg);
 	else
 	{
-		if (cmp_args(arg, list->arg_name) < 0)
-			lst_creat_begin(begin_list, arg);
+		if (cmp_args(arg, list->name) < 0)
+			d_lst_creat_begin(begin_list, arg);
 		else
 		{
-			while (list->next && cmp_args(arg, list->next->arg_name) > 0)
+			while (list->next && cmp_args(arg, list->next->name) > 0)
 				list = list->next;
-			lst_creat_after(list, arg);
+			d_lst_creat_after(list, arg);
 		}
 	}
 	return (*begin_list);
 }
 
-t_arglist	*create_list_from_argv(char **arg, int i)
+t_filelist	*put_file_into_list(t_filelist **begin_list, char *name)
+{
+	t_filelist	*list;
+
+	list = *begin_list;
+	if (list == NULL)
+		*begin_list = f_lstnew(name, "./");
+	else
+	{
+		if (cmp_args(name, list->name) < 0)
+			f_lst_creat_begin(begin_list, name, "./");
+		else
+		{
+			while (list->next && cmp_args(name, list->next->name) > 0)
+				list = list->next;
+			f_lst_creat_after(list, name, "./");
+		}
+	}
+	return (*begin_list);
+}
+
+t_dirlist	*create_list_from_argv(char **arg, int i)
 {
 	t_stat		*p_stat;
-	t_arglist	*dir_list;
-	t_arglist	*file_list;
+	t_dirlist	*dir_list;
+	t_filelist	*file_list;
 
 	file_list = NULL;
 	dir_list = NULL;
@@ -92,19 +113,21 @@ t_arglist	*create_list_from_argv(char **arg, int i)
 		else if (S_ISDIR(p_stat->st_mode) != 0)
 			dir_list = put_arg_into_list(&dir_list, arg[i]);
 		else
-			file_list = put_arg_into_list(&file_list, arg[i]);
+			file_list = put_file_into_list(&file_list, arg[i]);
 		i++;
 		free(p_stat);
 	}
-	disp_if_needed(file_list, "./");
+	if (file_list)
+		disp_if_needed(file_list);
 	if (file_list && dir_list)
 		ft_putchar('\n');
+	f_lstdel(&file_list);
 	return (dir_list);
 }
 
-t_arglist	*sort_args(char **arg)
+t_dirlist	*sort_args(char **arg)
 {
-	t_arglist	*p_list;
+	t_dirlist	*p_list;
 	int			i;
 
 	i = 1;

@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 11:05:32 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 17:35:55 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,55 +18,53 @@ int		g_opt_l = 0;
 int		g_opt_r = 0;
 int		g_opt_t = 0;
 
-void		disp_if_needed(t_arglist *file_list, char *dir_name)
+void		disp_if_needed(t_filelist *f_list)
 {
 	t_info nb_spaces;
 
 	nb_spaces = init_info_to_zero(nb_spaces);
-	nb_spaces = how_many_spaces(file_list, dir_name, nb_spaces);
-	while (file_list)
+	nb_spaces = how_many_spaces(f_list, nb_spaces);
+	while (f_list)
 	{
-		if (show_or_not_file(file_list->arg_name, dir_name) == 1)
+		if (show_or_not_file(f_list->name, f_list->dir_name) == 1)
 		{
 			if (g_opt_l == 1)
-				do_opt_l(file_list->arg_name, dir_name, nb_spaces);
+				do_opt_l(f_list, nb_spaces);
 			else
-				ft_putendl(file_list->arg_name);
+				ft_putendl(f_list->name);
 		}
-		file_list = file_list->next;
+		f_list = f_list->next;
 	}
 }
 
-t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
+t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 {
 	t_dirent	*s_dir;
-	t_arglist	**begin_list;
-	t_arglist	*list;
+	t_filelist	**begin_list;
+	t_filelist	*list;
 	char		*path1;
 	char		*path2;
 
-	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
-	if (begin_list == NULL)
-		exit(EXIT_FAILURE);
+	begin_list = (t_filelist **)malloc_me(sizeof(t_filelist *));
 	if ((s_dir = readdir(p_dir)) != NULL)
-		*begin_list = lst_str_new(s_dir->d_name);
+		*begin_list = f_lstnew(s_dir->d_name, dir_name);
 	while ((s_dir = readdir(p_dir)) != NULL)
 	{
 		list = *begin_list;
 		path1 = get_path(dir_name, s_dir->d_name);
-		path2 = get_path(dir_name, list->arg_name);
+		path2 = get_path(dir_name, list->name);
 		if (cmp_args(path1, path2) < 0)
-			lst_creat_begin(begin_list, s_dir->d_name);
+			f_lst_creat_begin(begin_list, s_dir->d_name, dir_name);
 		else
 		{
 			if (list->next)
 			{
 				free(path2);
-				path2 = get_path(dir_name, list->next->arg_name);
+				path2 = get_path(dir_name, list->next->name);
 			}
 			while (list->next && cmp_args(path1, path2) > 0)
 				list = list->next;
-			lst_creat_after(list, s_dir->d_name);
+			f_lst_creat_after(list, s_dir->d_name, dir_name);
 		}
 		free(path1);
 		free(path2);
@@ -75,38 +73,26 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 	return (list);
 }
 
-void		do_opt_r_caps(t_arglist *file_list, char *dir_name)
+void		do_opt_r_caps(t_filelist *f_list)
 {
-	t_stat		*p_stat;
-	char		*path;
-
-	while (file_list)
+	while (f_list)
 	{
-		path = get_path(dir_name, file_list->arg_name);
-		p_stat = (t_stat *)malloc(sizeof(t_stat));
-		if (lstat(path, p_stat) == -1)
+		if (S_ISDIR(f_list->st->st_mode) != 0
+			&& ft_strequ(f_list->name, ".") == 0
+			&& ft_strequ(f_list->name, "..") == 0)
 		{
-			perror("stat");
-			return ;
-		}
-		if (S_ISDIR(p_stat->st_mode) != 0
-			&& ft_strequ(file_list->arg_name, ".") == 0
-			&& ft_strequ(file_list->arg_name, "..") == 0)
-		{
-			if (show_or_not_dir(path) == 1)
+			if (show_or_not_dir(f_list->path) == 1)
 				ft_putchar('\n');
-			opendir_and_list(path, NAME);
+			opendir_and_list(f_list->path, NAME);
 		}
-		file_list = file_list->next;
-		free(path);
-		free(p_stat);
+		f_list = f_list->next;
 	}
 }
 
 int			opendir_and_list(char *dir_name, int disp_name)
 {
 	DIR			*p_dir;
-	t_arglist	*file_list;
+	t_filelist	*f_list;
 
 	if ((p_dir = opendir(dir_name)) == NULL)
 	{
@@ -116,7 +102,10 @@ int			opendir_and_list(char *dir_name, int disp_name)
 			ft_putstr_fd(":\n", 2);
 		}
 		ft_putstr_fd("ft_ls: ", 2);
-		perror(dir_name);
+		if (strrchr(dir_name, '/'))
+			perror(strrchr(dir_name, '/') + 1);
+		else
+			perror(dir_name);
 		return (0);
 	}
 	if (disp_name == NAME)
@@ -127,20 +116,20 @@ int			opendir_and_list(char *dir_name, int disp_name)
 			ft_putstr(":\n");
 		}
 	}
-	file_list = (t_arglist *)malloc(sizeof(t_arglist));
-	file_list = readdir_and_sort_files(p_dir, dir_name);
-	disp_if_needed(file_list, dir_name);
+	f_list = (t_filelist *)malloc_me(sizeof(t_filelist));
+	f_list = readdir_and_sort_files(p_dir, dir_name);
+	disp_if_needed(f_list);
 	if (g_opt_r_caps == 1)
-		do_opt_r_caps(file_list, dir_name);
+		do_opt_r_caps(f_list);
 	closedir(p_dir);
-	lst_str_del(&file_list);
+	f_lstdel(&f_list);
 	return (1);
 }
 
 int			main(int argc, char **argv)
 {
 	int			i;
-	t_arglist	*list;
+	t_dirlist	*list;
 
 	i = 1;
 	if (argc > 1)
@@ -149,16 +138,16 @@ int			main(int argc, char **argv)
 	if (argc == i)
 		opendir_and_list(".", NO_NAME);
 	else if (argc == i + 1 && list)
-			opendir_and_list(list->arg_name, NO_NAME);
+			opendir_and_list(list->name, NO_NAME);
 	else if (argc > i + 1)
 	{
 		while (list)
 		{
-			opendir_and_list(list->arg_name, NAME);
+			opendir_and_list(list->name, NAME);
 			if ((list = list->next))
 				ft_putchar('\n');
 		}
 	}
-	lst_str_del(&list);
+	d_lstdel(&list);
 	return (0);
 }
