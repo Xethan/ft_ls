@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 16:56:48 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 15:03:25 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 14:59:26 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	disp_all_rights(mode_t rights)
 	disp_rights(rights, 01, 'x');
 }
 
-void	right_number_of_spaces(int nb_spaces, char *info)
+void	put_spaces(int nb_spaces, char *info)
 {
 	size_t	i;
 
@@ -66,18 +66,21 @@ void	disp_type_of_file(mode_t mode)
 void	disp_link(char *file_name, char *dir_name)
 {
 	t_stat	*p_stat;
+	char	*path;
 	char	*link;
 
 	p_stat = (t_stat *)malloc(sizeof(t_stat));
-	if (lstat(get_path(dir_name, file_name), p_stat) == -1)
+	path = get_path(dir_name, file_name);
+	if (lstat(path, p_stat) == -1)
 	{
 		perror("stat");
 		return ;
 	}
 	link = (char *)malloc(p_stat->st_size * sizeof(char));
-	readlink(get_path(dir_name, file_name), link, p_stat->st_size);
+	readlink(path, link, p_stat->st_size);
 	ft_putstr(" -> ");
 	ft_putstr(link);
+	free(path);
 	free(p_stat);
 	free(link);
 }

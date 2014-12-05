@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/03 16:41:50 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 15:23:02 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@ typedef struct			s_arglist
 	struct s_arglist	*next;
 	struct s_arglist	*previous;
 }						t_arglist;
+
+typedef struct			s_filelist
+{
+	char				*name;
+	t_stat				*st;
+	char				*path;
+	struct s_arglist	*next;
+}						t_filelist;
 
 typedef struct			s_info
 {

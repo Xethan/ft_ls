@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/04 17:34:12 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/05 11:05:32 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 	t_dirent	*s_dir;
 	t_arglist	**begin_list;
 	t_arglist	*list;
+	char		*path1;
+	char		*path2;
 
 	begin_list = (t_arglist **)malloc(sizeof(t_arglist *));
 	if (begin_list == NULL)
@@ -51,14 +53,23 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 	while ((s_dir = readdir(p_dir)) != NULL)
 	{
 		list = *begin_list;
-		if (cmp_args(get_path(dir_name, s_dir->d_name), get_path(dir_name, list->arg_name)) < 0)
+		path1 = get_path(dir_name, s_dir->d_name);
+		path2 = get_path(dir_name, list->arg_name);
+		if (cmp_args(path1, path2) < 0)
 			lst_creat_begin(begin_list, s_dir->d_name);
 		else
 		{
-			while (list->next && cmp_args(get_path(dir_name, s_dir->d_name), get_path(dir_name, list->next->arg_name)) > 0)
+			if (list->next)
+			{
+				free(path2);
+				path2 = get_path(dir_name, list->next->arg_name);
+			}
+			while (list->next && cmp_args(path1, path2) > 0)
 				list = list->next;
 			lst_creat_after(list, s_dir->d_name);
 		}
+		free(path1);
+		free(path2);
 	}
 	list = *begin_list;
 	return (list);
@@ -67,11 +78,13 @@ t_arglist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 void		do_opt_r_caps(t_arglist *file_list, char *dir_name)
 {
 	t_stat		*p_stat;
+	char		*path;
 
 	while (file_list)
 	{
+		path = get_path(dir_name, file_list->arg_name);
 		p_stat = (t_stat *)malloc(sizeof(t_stat));
-		if (lstat(get_path(dir_name, file_list->arg_name), p_stat) == -1)
+		if (lstat(path, p_stat) == -1)
 		{
 			perror("stat");
 			return ;
@@ -80,11 +93,12 @@ void		do_opt_r_caps(t_arglist *file_list, char *dir_name)
 			&& ft_strequ(file_list->arg_name, ".") == 0
 			&& ft_strequ(file_list->arg_name, "..") == 0)
 		{
-			if (show_or_not_dir(get_path(dir_name, file_list->arg_name)) == 1)
+			if (show_or_not_dir(path) == 1)
 				ft_putchar('\n');
-			opendir_and_list(get_path(dir_name, file_list->arg_name), NAME);
+			opendir_and_list(path, NAME);
 		}
 		file_list = file_list->next;
+		free(path);
 		free(p_stat);
 	}
 }
