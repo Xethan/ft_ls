@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 16:09:35 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/07 16:22:23 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ void	*malloc_me(size_t size)
 
 	content = malloc(size);
 	if (content == NULL)
+	{
+		perror("malloc");
 		exit(EXIT_FAILURE);
+	}
 	return (content);
 }
 
