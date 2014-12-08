@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 16:58:05 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/08 14:20:43 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	do_opt_l(t_filelist *file, t_info nb_spaces)
 	itoa_free_space(nb_spaces.size, file->st->st_size);
 	ft_putnbr(file->st->st_size);
 	ft_putstr(" ");
-	date = ctime(&(file->st->st_mtimespec.tv_sec));
-	if (file->st->st_mtimespec.tv_sec < time(NULL) - 15778800 || file->st->st_mtimespec.tv_sec > time(NULL))
+	date = ctime(&(file->st->st_mtime));
+	if (file->st->st_mtime < time(NULL) - 15778800 || file->st->st_mtime > time(NULL))
 	{
 		write(1, date + 4, 7);
 		write(1, date + 19, 5);

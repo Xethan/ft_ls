@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 17:32:08 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/08 14:39:56 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int			cmp_args(char *arg1, char *arg2)
 {
 	t_stat	*p_stat1;
 	t_stat	*p_stat2;
+	time_t	tmp;
 
 	if (g_opt_t == 1)
 	{
@@ -29,13 +30,19 @@ int			cmp_args(char *arg1, char *arg2)
 			perror("stat");
 			exit(EXIT_FAILURE);
 		}
-		if (p_stat1->st_mtimespec.tv_sec > p_stat2->st_mtimespec.tv_sec)
+		if (g_opt_r == 1)
+		{
+			tmp = p_stat1->st_mtime;
+			p_stat1->st_mtime = p_stat2->st_mtime;
+			p_stat2->st_mtime = tmp;
+		}
+		if (p_stat1->st_mtime < p_stat2->st_mtime)
 		{
 			free(p_stat1);
 			free(p_stat2);
 			return (1);
 		}
-		if (p_stat1->st_mtimespec.tv_sec < p_stat2->st_mtimespec.tv_sec)
+		if (p_stat1->st_mtime > p_stat2->st_mtime)
 		{
 			free(p_stat1);
 			free(p_stat2);
