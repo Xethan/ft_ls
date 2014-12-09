@@ -6,7 +6,7 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/19 16:01:28 by ncolliau          #+#    #+#              #
-#    Updated: 2014/12/08 13:17:15 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/09 17:07:41 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,8 +23,6 @@ PATH_INCLUDES = ./libft/includes
 FLAGS = -Wall -Wextra -Werror
 
 .PHONY: make, all, make_libft, clean, fclean, re, norme
-
-.SUFFIXES:
 
 all : make_libft $(NAME)
 

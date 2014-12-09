@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 15:01:24 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 17:09:35 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,16 +88,19 @@ void	do_opt_l(t_filelist *file, t_info nb_spaces)
 	ft_putnbr(file->st->st_nlink);
 	ft_putstr(" ");
 	disp_uid_gid(file, nb_spaces);
+	itoa_free_space(nb_spaces.dev + 1, major(file->st->st_rdev));
 	if (file->st->st_rdev != 0)
 	{
 		ft_putnbr(major(file->st->st_rdev));
-		ft_putstr(",  ");
-		//itoa_free_space;
+		ft_putstr(",");
+		itoa_free_space(nb_spaces.size - 2, minor(file->st->st_rdev));
 		ft_putnbr(minor(file->st->st_rdev));
 	}
 	else
 	{
-		itoa_free_space(nb_spaces.size, file->st->st_size);
+		if (nb_spaces.dev != 0)
+			ft_putstr("  ");
+		itoa_free_space(nb_spaces.size - 2, file->st->st_size);
 		ft_putnbr(file->st->st_size);
 	}
 	ft_putstr(" ");

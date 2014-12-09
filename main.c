@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 14:57:11 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 17:09:36 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 				list = list->next;
 			new->next = list->next;
 			list->next = new;
-			nb_spaces = how_many_spaces(new, nb_spaces);
+			if (g_opt_a == 1 || new->name[0] != '.')
+				nb_spaces = how_many_spaces(new, nb_spaces);
 		}
 	}
 	list = *begin_list;

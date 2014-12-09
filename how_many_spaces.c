@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 14:57:04 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 17:09:34 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_info	init_info_to_zero(t_info max)
 	max.nlink = 0;
 	max.uid = 0;
 	max.gid = 0;
+	max.dev = 0;
 	max.total = 0;
 	return (max);
 }
@@ -39,7 +40,13 @@ int		count_spaces(int info, size_t maxlength)
 t_info	how_many_spaces(t_filelist *f_list, t_info max)
 {
 	max.nlink = count_spaces(f_list->st->st_nlink, max.nlink);
-	max.size = count_spaces(f_list->st->st_size, max.size);
+	if (f_list->st->st_rdev != 0)
+	{
+		max.dev = count_spaces(major(f_list->st->st_rdev), max.dev);
+		max.size = count_spaces(minor(f_list->st->st_rdev), max.size);
+	}
+	else
+		max.size = count_spaces(f_list->st->st_size, max.size);
 	if (getgrgid(f_list->st->st_gid))
 	{
 		if (ft_strlen(getgrgid(f_list->st->st_gid)->gr_name) > max.gid)

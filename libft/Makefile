@@ -6,7 +6,7 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/07 15:24:29 by ncolliau          #+#    #+#              #
-#    Updated: 2014/12/09 10:50:53 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/09 17:04:32 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,6 @@ PATH_INCLUDE = ./includes
 FLAGS = -Wall -Wextra -Werror
 
 .PHONY: make, all, $(NAME), clean, fclean, re, norme
-
-.SUFFIXES:
 
 all : $(NAME)
 

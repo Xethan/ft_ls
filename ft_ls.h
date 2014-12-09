@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 14:57:32 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 15:55:43 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct			s_info
 	size_t				size;
 	size_t				uid;
 	size_t				gid;
+	size_t				dev;
 	size_t				total;
 }						t_info;
 
