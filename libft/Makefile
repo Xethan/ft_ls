@@ -6,7 +6,7 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/07 15:24:29 by ncolliau          #+#    #+#              #
-#    Updated: 2014/12/08 13:16:58 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/09 10:50:53 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,13 @@ all : $(NAME)
 
 $(NAME) : $(SRC)
 		@gcc $(FLAGS) -I $(PATH_INCLUDE) -c $(SRC)
+		@ar rc $(NAME) $(OBJ)
 		@echo "libft compiled"
-		ar rc $(NAME) $(OBJ)
 		ranlib $(NAME)
 
 clean :
-		@echo "clean done"
 		@rm -f $(OBJ)
+		@echo "clean done"
 
 fclean : clean
 		rm -f $(NAME)

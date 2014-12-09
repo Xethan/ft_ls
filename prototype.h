@@ -6,20 +6,18 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 11:17:15 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 16:58:59 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 14:50:51 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROTOTYPE_H
 # define PROTOTYPE_H
 
-# include "ft_ls.h"
-
 /*
 **      MAIN.C :
 */
 
-void		disp_if_needed(t_filelist *f_list);
+void		disp_filelist(t_filelist *f_list, t_info nb_spaces);
 t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name);
 void		do_opt_r_caps(t_filelist *f_list);
 int			opendir_and_list(char *dir_name, int disp_name_dir);
@@ -80,8 +78,6 @@ t_info		how_many_spaces(t_filelist *filelist, t_info length);
 
 void		f_lstadd(t_filelist **begin_list, t_filelist *new);
 t_filelist	*f_lstnew(char *name, char *dir_name);
-void		f_lst_creat_after(t_filelist *list, char *name, char *dir_name);
 void		f_lstdel(t_filelist **begin_list);
-void		f_lst_creat_begin(t_filelist **begin_list, char *name, char *dir_name);
 
 #endif

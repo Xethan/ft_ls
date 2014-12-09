@@ -6,11 +6,12 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/07 16:22:23 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 14:56:49 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include "prototype.h"
 
 extern int g_opt_r_caps;
 extern int g_opt_a;

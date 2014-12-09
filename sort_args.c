@@ -6,11 +6,12 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/08 14:39:56 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 15:03:07 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include "prototype.h"
 
 extern int g_opt_r;
 extern int g_opt_t;
@@ -77,25 +78,32 @@ t_dirlist	*put_arg_into_list(t_dirlist **begin_list, char *arg)
 	return (*begin_list);
 }
 
-t_filelist	*put_file_into_list(t_filelist **begin_list, char *name)
+t_info		file_into_list(t_filelist **begin_list, char *name, t_info spaces)
 {
 	t_filelist	*list;
+	t_filelist	*new;
 
 	list = *begin_list;
 	if (list == NULL)
-		*begin_list = f_lstnew(name, "./");
+	{
+		*begin_list = f_lstnew(name, "");
+		spaces = how_many_spaces(*begin_list, spaces);
+	}
 	else
 	{
+		new = f_lstnew(name, "");
 		if (cmp_args(name, list->name) < 0)
-			f_lst_creat_begin(begin_list, name, "./");
+			f_lstadd(begin_list, new);
 		else
 		{
 			while (list->next && cmp_args(name, list->next->name) > 0)
 				list = list->next;
-			f_lst_creat_after(list, name, "./");
+			new->next = list->next;
+			list->next = new;
 		}
+		spaces = how_many_spaces(new, spaces);
 	}
-	return (*begin_list);
+	return (spaces);
 }
 
 t_dirlist	*create_list_from_argv(char **arg, int i)
@@ -103,9 +111,11 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 	t_stat		*p_stat;
 	t_dirlist	*dir_list;
 	t_filelist	*file_list;
+	t_info		nb_spaces;
 
 	file_list = NULL;
 	dir_list = NULL;
+	nb_spaces = init_info_to_zero(nb_spaces);
 	while (arg[i])
 	{
 		p_stat = (t_stat *)malloc(sizeof(t_stat));
@@ -120,12 +130,12 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 		else if (S_ISDIR(p_stat->st_mode) != 0)
 			dir_list = put_arg_into_list(&dir_list, arg[i]);
 		else
-			file_list = put_file_into_list(&file_list, arg[i]);
+			nb_spaces = file_into_list(&file_list, arg[i], nb_spaces);
 		i++;
 		free(p_stat);
 	}
 	if (file_list)
-		disp_if_needed(file_list);
+		disp_filelist(file_list, nb_spaces);
 	if (file_list && dir_list)
 		ft_putchar('\n');
 	f_lstdel(&file_list);

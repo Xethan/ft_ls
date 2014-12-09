@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_list_dir.c                                  :+:      :+:    :+:   */
+/*   handle_dir_list.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 11:09:53 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 16:57:51 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 14:56:54 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include "prototype.h"
 
 void		d_lstadd(t_dirlist **begin_list, t_dirlist *new)
 {
@@ -37,7 +38,6 @@ void		d_lst_creat_after(t_dirlist *list, char *name)
 	t_dirlist	*new;
 
 	new = d_lstnew(name);
-		return ;
 	new->next = list->next;
 	list->next = new;
 }

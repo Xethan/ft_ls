@@ -6,11 +6,12 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/08 14:20:43 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 15:01:24 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include "prototype.h"
 
 extern int g_opt_l;
 
@@ -34,15 +35,8 @@ void	itoa_free_space(int length, int info)
 	free(cpy);
 }
 
-void	do_opt_l(t_filelist *file, t_info nb_spaces)
+void	disp_uid_gid(t_filelist *file, t_info nb_spaces)
 {
-	char	*date;
-
-	disp_type_of_file(file->st->st_mode);
-	disp_all_rights(file->st->st_mode);
-	itoa_free_space(nb_spaces.nlink, file->st->st_nlink);
-	ft_putnbr(file->st->st_nlink);
-	ft_putstr(" ");
 	if (getpwuid(file->st->st_uid))
 	{
 		ft_putstr(getpwuid(file->st->st_uid)->pw_name);
@@ -63,11 +57,16 @@ void	do_opt_l(t_filelist *file, t_info nb_spaces)
 		ft_putnbr(file->st->st_gid);
 		itoa_free_space(nb_spaces.gid - 2, file->st->st_gid);
 	}
-	itoa_free_space(nb_spaces.size, file->st->st_size);
-	ft_putnbr(file->st->st_size);
-	ft_putstr(" ");
-	date = ctime(&(file->st->st_mtime));
-	if (file->st->st_mtime < time(NULL) - 15778800 || file->st->st_mtime > time(NULL))
+}
+
+void	disp_date_name_link(t_filelist *file)
+{
+	char	*date;
+	time_t	modif_time;
+
+	modif_time = file->st->st_mtime;
+	date = ctime(&(modif_time));
+	if (modif_time < time(NULL) - 15778800 || modif_time > time(NULL))
 	{
 		write(1, date + 4, 7);
 		write(1, date + 19, 5);
@@ -79,4 +78,28 @@ void	do_opt_l(t_filelist *file, t_info nb_spaces)
 	if (S_ISLNK(file->st->st_mode) != 0)
 		disp_link(file);
 	ft_putchar('\n');
+}
+
+void	do_opt_l(t_filelist *file, t_info nb_spaces)
+{
+	disp_type_of_file(file->st->st_mode);
+	disp_all_rights(file->st->st_mode);
+	itoa_free_space(nb_spaces.nlink, file->st->st_nlink);
+	ft_putnbr(file->st->st_nlink);
+	ft_putstr(" ");
+	disp_uid_gid(file, nb_spaces);
+	if (file->st->st_rdev != 0)
+	{
+		ft_putnbr(major(file->st->st_rdev));
+		ft_putstr(",  ");
+		//itoa_free_space;
+		ft_putnbr(minor(file->st->st_rdev));
+	}
+	else
+	{
+		itoa_free_space(nb_spaces.size, file->st->st_size);
+		ft_putnbr(file->st->st_size);
+	}
+	ft_putstr(" ");
+	disp_date_name_link(file);
 }

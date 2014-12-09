@@ -6,11 +6,12 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 16:56:48 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/05 16:58:47 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/09 14:56:44 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include "prototype.h"
 
 void	disp_rights(mode_t rights, int test, char to_disp)
 {
