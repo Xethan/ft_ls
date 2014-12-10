@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 17:09:36 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/10 17:10:32 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,13 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 	if ((s_dir = readdir(p_dir)) != NULL)
 	{
 		*begin_list = f_lstnew(s_dir->d_name, dir_name);
-		nb_spaces = how_many_spaces(*begin_list, nb_spaces);
+		if (g_opt_a == 1 || (*begin_list)->name[0] != '.')
+			nb_spaces = how_many_spaces(*begin_list, nb_spaces);
+	}
+	else
+	{
+		free(begin_list);
+		return (NULL);
 	}
 	while ((s_dir = readdir(p_dir)) != NULL)
 	{
@@ -61,9 +67,9 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 				list = list->next;
 			new->next = list->next;
 			list->next = new;
-			if (g_opt_a == 1 || new->name[0] != '.')
-				nb_spaces = how_many_spaces(new, nb_spaces);
 		}
+		if (g_opt_a == 1 || new->name[0] != '.')
+			nb_spaces = how_many_spaces(new, nb_spaces);
 	}
 	list = *begin_list;
 	free(begin_list);

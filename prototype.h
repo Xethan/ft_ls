@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 11:17:15 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 14:50:51 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/10 11:55:54 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		get_options(char c);
 int			check_options(char **arg);
 
 /*
-**       HANDLE_LIST_DIR.C :
+**       HANDLE_DIR_LIST.C :
 */
 
 void		d_lstadd(t_dirlist **begin_list, t_dirlist *new);
@@ -41,6 +41,14 @@ void		d_lst_creat_begin(t_dirlist **begin_list, char *arg_name);
 void		d_lst_creat_after(t_dirlist *list, char *arg_name);
 void		d_lstdel(t_dirlist **begin_list);
 t_dirlist	*d_lstnew(char *arg_name);
+
+/*
+**       HANDLE_FILE_LIST.C :
+*/
+
+void		f_lstadd(t_filelist **begin_list, t_filelist *new);
+t_filelist	*f_lstnew(char *name, char *dir_name);
+void		f_lstdel(t_filelist **begin_list);
 
 /*
 **       SORT_ARGS.C :
@@ -56,28 +64,26 @@ int			cmp_args(char *arg1, char *arg2);
 */
 
 char		*get_path(char *dir_name, char *file_name);
+void		itoa_free_space(int length, int info);
+void		disp_rights(mode_t rights, int test, char to_disp);
+void		disp_all_rights(mode_t rights);
 void		do_opt_l(t_filelist *file, t_info nb_spaces);
 
 /*
-**       BIS_OPT_L.C :
+**       BIS_STAT.C :
 */
 
-void		put_spaces(int nb_spaces, char *info);
-void		disp_rights(mode_t rights, int test, char to_disp);
-void		disp_all_rights(mode_t rights);
 void		disp_type_of_file(mode_t mode);
-void		disp_link(t_filelist *f_list);
+void		disp_uid_gid(t_filelist *file, t_info nb_spaces);
+void		disp_maj_min_size(t_filelist *file, t_info nb_spaces);
+void		disp_date_name_link(t_filelist *file);
 
 /*
 **       HOW_MANY_SPACES.C :
 */
 
+void		put_spaces(int nb_spaces, char *info);
 t_info		init_info_to_zero(t_info p_info);
 t_info		how_many_spaces(t_filelist *filelist, t_info length);
-
-
-void		f_lstadd(t_filelist **begin_list, t_filelist *new);
-t_filelist	*f_lstnew(char *name, char *dir_name);
-void		f_lstdel(t_filelist **begin_list);
 
 #endif

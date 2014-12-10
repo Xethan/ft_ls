@@ -6,14 +6,24 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 17:09:34 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/10 12:21:33 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include "prototype.h"
 
-extern int g_opt_l;
+void	put_spaces(int nb_spaces, char *info)
+{
+	size_t	i;
+
+	i = 0;
+	while (i != nb_spaces - ft_strlen(info))
+	{
+		ft_putchar(' ');
+		i++;
+	}
+}
 
 t_info	init_info_to_zero(t_info max)
 {
@@ -40,7 +50,7 @@ int		count_spaces(int info, size_t maxlength)
 t_info	how_many_spaces(t_filelist *f_list, t_info max)
 {
 	max.nlink = count_spaces(f_list->st->st_nlink, max.nlink);
-	if (f_list->st->st_rdev != 0)
+	if (S_ISCHR(f_list->st->st_mode) || S_ISBLK(f_list->st->st_mode))
 	{
 		max.dev = count_spaces(major(f_list->st->st_rdev), max.dev);
 		max.size = count_spaces(minor(f_list->st->st_rdev), max.size);

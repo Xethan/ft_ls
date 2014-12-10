@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/05 15:25:16 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 15:03:41 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/10 15:40:59 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ t_filelist	*f_lstnew(char *name, char *dir_name)
 
 	new_list = (t_filelist *)malloc_me(sizeof(t_filelist));
 	new_list->name = (char *)malloc_me((ft_strlen(name) + 1) * sizeof(char));
-	if ((new_list->dir_name = ft_strdup(dir_name)) == NULL)
-		exit(EXIT_FAILURE);
+	new_list->dir_name = (char *)malloc_me((ft_strlen(dir_name) + 1) * sizeof(char));
 	if (dir_name && dir_name[0])
 		new_list->path = get_path(dir_name, name);
 	else if ((new_list->path = ft_strdup(name)) == NULL)
@@ -37,11 +36,11 @@ t_filelist	*f_lstnew(char *name, char *dir_name)
 		perror("stat");
 		exit(EXIT_FAILURE);
 	}
-	if (!name || !dir_name)
-		exit(EXIT_FAILURE);
 	else
 	{
 		ft_memmove(new_list->name, name, ft_strlen(name) + 1);
+		if (strrchr(dir_name, '/'))
+			dir_name = ft_strrchr(dir_name, '/') + 1;
 		ft_memmove(new_list->dir_name, dir_name, ft_strlen(dir_name) + 1);
 	}
 	new_list->next = NULL;

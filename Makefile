@@ -6,7 +6,7 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/19 16:01:28 by ncolliau          #+#    #+#              #
-#    Updated: 2014/12/09 17:07:41 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/10 11:47:09 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 NAME = ft_ls
 
 SRC =	main.c check_options.c sort_args.c handle_dir_list.c stat.c \
-		how_many_spaces.c bis_opt_l.c handle_file_list.c
+		how_many_spaces.c bis_stat.c handle_file_list.c
 
 OBJ = $(SRC:.c=.o)
 
