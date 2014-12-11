@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/10 12:21:33 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/11 12:04:09 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ t_info	how_many_spaces(t_filelist *f_list, t_info max)
 	}
 	else
 		max.uid = count_spaces(f_list->st->st_uid, max.uid);
-	if (show_or_not_file(f_list->name, f_list->dir_name) == 1)
-		max.total += f_list->st->st_blocks;
+	max.total += f_list->st->st_blocks;
 	return (max);
 }

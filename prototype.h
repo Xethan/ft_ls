@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 11:17:15 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/10 11:55:54 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/11 11:47:49 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			opendir_and_list(char *dir_name, int disp_name_dir);
 */
 
 void		*malloc_me(size_t size);
-int			show_or_not_file(char *file_name, char *dir_name);
+int			show_or_not_files(t_filelist **begin_list);
 int			show_or_not_dir(char *dir_name);
 void		get_options(char c);
 int			check_options(char **arg);
@@ -54,10 +54,11 @@ void		f_lstdel(t_filelist **begin_list);
 **       SORT_ARGS.C :
 */
 
-t_dirlist	*sort_args(char **arg);
-t_dirlist	*create_list_from_argv(char **arg, int i);
-t_dirlist	*put_arg_into_list(t_dirlist **begin_list, char *arg);
 int			cmp_args(char *arg1, char *arg2);
+t_dirlist	*arg_into_list(t_dirlist **begin_list, char *arg);
+t_info		file_into_list(t_filelist **begin_list, char *name, t_info spaces);
+t_dirlist	*create_list_from_argv(char **arg, int i);
+t_dirlist	*sort_args(char **arg);
 
 /*
 **       STAT.C :

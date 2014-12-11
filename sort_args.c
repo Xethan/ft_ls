@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 15:03:07 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/11 11:15:33 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 extern int g_opt_r;
 extern int g_opt_t;
+extern int g_opt_l;
 
 int			cmp_args(char *arg1, char *arg2)
 {
@@ -57,7 +58,7 @@ int			cmp_args(char *arg1, char *arg2)
 	return (ft_strcmp(arg1, arg2));
 }
 
-t_dirlist	*put_arg_into_list(t_dirlist **begin_list, char *arg)
+t_dirlist	*arg_into_list(t_dirlist **begin_list, char *arg)
 {
 	t_dirlist	*list;
 
@@ -106,6 +107,26 @@ t_info		file_into_list(t_filelist **begin_list, char *name, t_info spaces)
 	return (spaces);
 }
 
+t_dirlist	*linkdir_into_list(t_dirlist **begin_list, char *symlink)
+{
+	t_stat		*p_stat;
+	char		*dir_link;
+
+	p_stat = (t_stat *)malloc_me(sizeof(t_stat));
+	if (lstat(symlink, p_stat) == 1)
+	{
+		perror("stat");
+		exit(EXIT_FAILURE);
+	}
+	dir_link = (char *)malloc((p_stat->st_size + 1) * sizeof(char));
+	readlink(symlink, dir_link, p_stat->st_size);
+	dir_link[p_stat->st_size] = '\0';
+	// Recuperer le path du dossier linke
+	*begin_list = arg_into_list(begin_list, dir_link);
+	free(dir_link);
+	return (*begin_list);
+}
+
 t_dirlist	*create_list_from_argv(char **arg, int i)
 {
 	t_stat		*p_stat;
@@ -123,12 +144,14 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 			exit(EXIT_FAILURE);
 		if (lstat(arg[i], p_stat) == -1)
 		{
-			ft_putstr_fd("./ft_ls: ", 2);
+			ft_putstr_fd("ft_ls: ", 2);
 			ft_putstr_fd(arg[i], 2);
 			ft_putstr_fd(": No such file or directory\n", 2);
 		}
 		else if (S_ISDIR(p_stat->st_mode) != 0)
-			dir_list = put_arg_into_list(&dir_list, arg[i]);
+			dir_list = arg_into_list(&dir_list, arg[i]);
+		else if (S_ISLNK(p_stat->st_mode) != 0) // && link un dossier
+			dir_list = linkdir_into_list(&dir_list, arg[i]);
 		else
 			nb_spaces = file_into_list(&file_list, arg[i], nb_spaces);
 		i++;

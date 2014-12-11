@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/10 15:58:06 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/11 11:54:39 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,42 @@ void	*malloc_me(size_t size)
 	return (content);
 }
 
-int		show_or_not_file(char *file_name, char *dir_name)
+int		verif_dir(char *dir_name)
 {
-	if (g_opt_a == 1)
+	if (ft_strequ(dir_name, ".")
+		|| ft_strequ(dir_name, "./")
+		|| ft_strequ(dir_name, "..")
+		|| ft_strequ(dir_name, "../")
+		|| dir_name[0] != '.')
 		return (1);
-	if (file_name[0] != '.')
-	{
-		if (g_opt_r_caps == 1)
-		{
-			//if (!ft_strrchr(dir_name, '/') && dir_name[0] == '.')
-				//return (0);
-			if (ft_strrchr(dir_name, '/')
-				&& *(ft_strrchr(dir_name, '/') + 1) == '.')
-				return (0);
-		}
-		return (1);
-	}
 	return (0);
+}
+
+int		show_or_not_files(t_filelist **begin_list)
+{
+	t_filelist *f_list;
+	int			verif;
+
+	verif = 0;
+	f_list = *begin_list;
+	if ((g_opt_r_caps == 0 || g_opt_a == 1) && f_list)
+		return (1);
+	while (f_list)
+	{
+		if (f_list->name[0] != '.')
+			verif = 1;
+		f_list = f_list->next;
+	}
+	f_list = *begin_list;
+	if (verif == 0)
+		return (0);
+	if (!ft_strrchr(f_list->dir_name, '/') && verif_dir(f_list->dir_name) == 0)
+		return (0);
+	if (ft_strrchr(f_list->dir_name, '/')
+		&& *(ft_strrchr(f_list->dir_name, '/') + 1) == '.'
+		&& verif_dir(ft_strrchr(f_list->dir_name, '/') + 1) == 0)
+		return (0);
+	return (1);
 }
 
 int		show_or_not_dir(char *dir_name)

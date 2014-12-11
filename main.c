@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/10 17:10:32 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/11 11:48:01 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		disp_filelist(t_filelist *f_list, t_info nb_spaces)
 {
 	while (f_list)
 	{
-		if (show_or_not_file(f_list->name, f_list->dir_name) == 1)
+		if (g_opt_a == 1 || f_list->name[0] != '.')
 		{
 			if (g_opt_l == 1)
 				do_opt_l(f_list, nb_spaces);
@@ -50,11 +50,6 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 		if (g_opt_a == 1 || (*begin_list)->name[0] != '.')
 			nb_spaces = how_many_spaces(*begin_list, nb_spaces);
 	}
-	else
-	{
-		free(begin_list);
-		return (NULL);
-	}
 	while ((s_dir = readdir(p_dir)) != NULL)
 	{
 		list = *begin_list;
@@ -72,14 +67,17 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 			nb_spaces = how_many_spaces(new, nb_spaces);
 	}
 	list = *begin_list;
-	free(begin_list);
-	if (g_opt_l == 1)
+	if (show_or_not_files(begin_list))
 	{
-		ft_putstr("total ");
-		ft_putnbr(nb_spaces.total);
-		ft_putchar('\n');
+		if (g_opt_l == 1)
+		{
+			ft_putstr("total ");
+			ft_putnbr(nb_spaces.total);
+			ft_putchar('\n');
+		}
+		disp_filelist(list, nb_spaces);
 	}
-	disp_filelist(list, nb_spaces);
+	free(begin_list);
 	return (list);
 }
 
@@ -140,7 +138,8 @@ int			main(int argc, char **argv)
 	i = 1;
 	if (argc > 1)
 		i = check_options(argv);
-	list = sort_args(argv);
+	list = create_list_from_argv(argv, i);
+	//list = sort_args(argv);
 	if (argc == i)
 		opendir_and_list(".", NO_NAME);
 	else if (argc == i + 1 && list)
