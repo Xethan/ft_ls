@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 11:17:15 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/11 11:47:49 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/12 16:29:57 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int			cmp_args(char *arg1, char *arg2);
 t_dirlist	*arg_into_list(t_dirlist **begin_list, char *arg);
 t_info		file_into_list(t_filelist **begin_list, char *name, t_info spaces);
 t_dirlist	*create_list_from_argv(char **arg, int i);
-t_dirlist	*sort_args(char **arg);
 
 /*
 **       STAT.C :

@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/11 11:15:33 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/12 16:29:37 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,7 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 	nb_spaces = init_info_to_zero(nb_spaces);
 	while (arg[i])
 	{
-		p_stat = (t_stat *)malloc(sizeof(t_stat));
-		if (p_stat == NULL)
-			exit(EXIT_FAILURE);
+		p_stat = (t_stat *)malloc_me(sizeof(t_stat));
 		if (lstat(arg[i], p_stat) == -1)
 		{
 			ft_putstr_fd("ft_ls: ", 2);
@@ -150,8 +148,8 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 		}
 		else if (S_ISDIR(p_stat->st_mode) != 0)
 			dir_list = arg_into_list(&dir_list, arg[i]);
-		else if (S_ISLNK(p_stat->st_mode) != 0) // && link un dossier
-			dir_list = linkdir_into_list(&dir_list, arg[i]);
+		//else if (S_ISLNK(p_stat->st_mode) != 0) // && link un dossier && pas -l
+		//	dir_list = linkdir_into_list(&dir_list, arg[i]);
 		else
 			nb_spaces = file_into_list(&file_list, arg[i], nb_spaces);
 		i++;
@@ -163,20 +161,4 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 		ft_putchar('\n');
 	f_lstdel(&file_list);
 	return (dir_list);
-}
-
-t_dirlist	*sort_args(char **arg)
-{
-	t_dirlist	*p_list;
-	int			i;
-
-	i = 1;
-	while (arg[i] && arg[i][0] == '-' && arg[i][1] != '-')
-		i++;
-	if (arg[i] && arg[i][1] == '-')
-		i++;
-	if (!arg[i])
-		return (NULL);
-	p_list = create_list_from_argv(arg, i);
-	return (p_list);
 }

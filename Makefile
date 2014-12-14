@@ -6,7 +6,7 @@
 #    By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/19 16:01:28 by ncolliau          #+#    #+#              #
-#    Updated: 2014/12/10 11:47:09 by ncolliau         ###   ########.fr        #
+#    Updated: 2014/12/14 12:17:03 by ncolliau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,3 +45,4 @@ re : fclean all
 
 norme :
 			norminette $(SRC) ft_ls.h
+			make -C libft/ norme

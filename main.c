@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/11 11:48:01 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/12 16:29:43 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ int			main(int argc, char **argv)
 	if (argc > 1)
 		i = check_options(argv);
 	list = create_list_from_argv(argv, i);
-	//list = sort_args(argv);
 	if (argc == i)
 		opendir_and_list(".", NO_NAME);
 	else if (argc == i + 1 && list)
