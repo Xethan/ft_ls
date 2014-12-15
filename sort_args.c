@@ -6,61 +6,18 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 15:19:57 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/12 16:29:37 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 17:39:46 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include "prototype.h"
 
-extern int g_opt_r;
-extern int g_opt_t;
 extern int g_opt_l;
 
-int			cmp_args(char *arg1, char *arg2)
+t_dlist	*arg_into_list(t_dlist **begin_list, char *arg)
 {
-	t_stat	*p_stat1;
-	t_stat	*p_stat2;
-	time_t	tmp;
-
-	if (g_opt_t == 1)
-	{
-		p_stat1 = (t_stat *)malloc(sizeof(t_stat));
-		p_stat2 = (t_stat *)malloc(sizeof(t_stat));
-		if (lstat(arg1, p_stat1) == -1 || lstat(arg2, p_stat2) == -1)
-		{
-			perror("stat");
-			exit(EXIT_FAILURE);
-		}
-		if (g_opt_r == 1)
-		{
-			tmp = p_stat1->st_mtime;
-			p_stat1->st_mtime = p_stat2->st_mtime;
-			p_stat2->st_mtime = tmp;
-		}
-		if (p_stat1->st_mtime < p_stat2->st_mtime)
-		{
-			free(p_stat1);
-			free(p_stat2);
-			return (1);
-		}
-		if (p_stat1->st_mtime > p_stat2->st_mtime)
-		{
-			free(p_stat1);
-			free(p_stat2);
-			return (-1);
-		}
-		free(p_stat1);
-		free(p_stat2);
-	}
-	if (g_opt_r == 1)
-		return (-1 * ft_strcmp(arg1, arg2));
-	return (ft_strcmp(arg1, arg2));
-}
-
-t_dirlist	*arg_into_list(t_dirlist **begin_list, char *arg)
-{
-	t_dirlist	*list;
+	t_dlist		*list;
 
 	list = *begin_list;
 	if (list == NULL)
@@ -79,10 +36,10 @@ t_dirlist	*arg_into_list(t_dirlist **begin_list, char *arg)
 	return (*begin_list);
 }
 
-t_info		file_into_list(t_filelist **begin_list, char *name, t_info spaces)
+t_info	file_into_list(t_flist **begin_list, char *name, t_info spaces)
 {
-	t_filelist	*list;
-	t_filelist	*new;
+	t_flist		*list;
+	t_flist		*new;
 
 	list = *begin_list;
 	if (list == NULL)
@@ -107,7 +64,7 @@ t_info		file_into_list(t_filelist **begin_list, char *name, t_info spaces)
 	return (spaces);
 }
 
-t_dirlist	*linkdir_into_list(t_dirlist **begin_list, char *symlink)
+t_dlist	*linkdir_into_list(t_dlist **begin_list, char *symlink)
 {
 	t_stat		*p_stat;
 	char		*dir_link;
@@ -127,11 +84,27 @@ t_dirlist	*linkdir_into_list(t_dirlist **begin_list, char *symlink)
 	return (*begin_list);
 }
 
-t_dirlist	*create_list_from_argv(char **arg, int i)
+int		is_link_fold(char *link)
+{
+	t_stat	*p_stat;
+
+	p_stat = (t_stat *)malloc_me(sizeof(t_stat));
+	if (stat(link, p_stat) == -1)
+	{
+		perror("stat");
+		exit(EXIT_FAILURE);
+	}
+	if (S_ISDIR(p_stat->st_mode) != 0 && g_opt_l == 0)
+		return (0); // 1 en vrai mais la fonction est pas prete
+	free(p_stat);
+	return (0);
+}
+
+t_dlist	*create_list_from_argv(char **arg, int i)
 {
 	t_stat		*p_stat;
-	t_dirlist	*dir_list;
-	t_filelist	*file_list;
+	t_dlist		*dir_list;
+	t_flist		*file_list;
 	t_info		nb_spaces;
 
 	file_list = NULL;
@@ -148,8 +121,8 @@ t_dirlist	*create_list_from_argv(char **arg, int i)
 		}
 		else if (S_ISDIR(p_stat->st_mode) != 0)
 			dir_list = arg_into_list(&dir_list, arg[i]);
-		//else if (S_ISLNK(p_stat->st_mode) != 0) // && link un dossier && pas -l
-		//	dir_list = linkdir_into_list(&dir_list, arg[i]);
+		else if (S_ISLNK(p_stat->st_mode) != 0 && is_link_fold(arg[i]) == 1)
+			dir_list = linkdir_into_list(&dir_list, arg[i]);
 		else
 			nb_spaces = file_into_list(&file_list, arg[i], nb_spaces);
 		i++;

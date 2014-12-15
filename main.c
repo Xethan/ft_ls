@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/12 16:29:43 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 17:24:44 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,21 @@
 int		g_opt_r_caps = 0;
 int		g_opt_a = 0;
 int		g_opt_l = 0;
-int		g_opt_r = 0;
+int		g_opt_r = -1;
 int		g_opt_t = 0;
 
-void		disp_filelist(t_filelist *f_list, t_info nb_spaces)
+t_info	into_list(t_flist **b_list, DIR *p_dir, char *dir_name, t_info spaces)
 {
-	while (f_list)
-	{
-		if (g_opt_a == 1 || f_list->name[0] != '.')
-		{
-			if (g_opt_l == 1)
-				do_opt_l(f_list, nb_spaces);
-			else
-				ft_putendl(f_list->name);
-		}
-		f_list = f_list->next;
-	}
-}
-
-t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
-{
+	t_flist		*list;
+	t_flist		*new;
 	t_dirent	*s_dir;
-	t_filelist	**begin_list;
-	t_filelist	*list;
-	t_filelist	*new;
-	t_info		nb_spaces;
 
-	begin_list = (t_filelist **)malloc_me(sizeof(t_filelist *));
-	nb_spaces = init_info_to_zero(nb_spaces);
-	if ((s_dir = readdir(p_dir)) != NULL)
-	{
-		*begin_list = f_lstnew(s_dir->d_name, dir_name);
-		if (g_opt_a == 1 || (*begin_list)->name[0] != '.')
-			nb_spaces = how_many_spaces(*begin_list, nb_spaces);
-	}
 	while ((s_dir = readdir(p_dir)) != NULL)
 	{
-		list = *begin_list;
+		list = *b_list;
 		new = f_lstnew(s_dir->d_name, dir_name);
 		if (cmp_args(new->path, list->path) < 0)
-			f_lstadd(begin_list, new);
+			f_lstadd(b_list, new);
 		else
 		{
 			while (list->next && cmp_args(new->path, list->next->path) > 0)
@@ -64,10 +39,26 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 			list->next = new;
 		}
 		if (g_opt_a == 1 || new->name[0] != '.')
-			nb_spaces = how_many_spaces(new, nb_spaces);
+			spaces = how_many_spaces(new, spaces);
 	}
-	list = *begin_list;
-	if (show_or_not_files(begin_list))
+	return (spaces);
+}
+
+t_flist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
+{
+	t_dirent	*s_dir;
+	t_flist		*list;
+	t_info		nb_spaces;
+
+	nb_spaces = init_info_to_zero(nb_spaces);
+	if ((s_dir = readdir(p_dir)) != NULL)
+	{
+		list = f_lstnew(s_dir->d_name, dir_name);
+		if (g_opt_a == 1 || list->name[0] != '.')
+			nb_spaces = how_many_spaces(list, nb_spaces);
+	}
+	nb_spaces = into_list(&list, p_dir, dir_name, nb_spaces);
+	if (show_or_not_files(&list))
 	{
 		if (g_opt_l == 1)
 		{
@@ -77,11 +68,10 @@ t_filelist	*readdir_and_sort_files(DIR *p_dir, char *dir_name)
 		}
 		disp_filelist(list, nb_spaces);
 	}
-	free(begin_list);
 	return (list);
 }
 
-void		do_opt_r_caps(t_filelist *f_list)
+void	do_recursivity(t_flist *f_list)
 {
 	while (f_list)
 	{
@@ -97,43 +87,37 @@ void		do_opt_r_caps(t_filelist *f_list)
 	}
 }
 
-int			opendir_and_list(char *dir_name, int disp_name)
+void	opendir_and_list(char *dir_name, int disp_name)
 {
 	DIR			*p_dir;
-	t_filelist	*f_list;
+	t_flist		*f_list;
 
-	if ((p_dir = opendir(dir_name)) == NULL)
-	{
-		if (disp_name == NAME)
-		{
-			ft_putstr_fd(dir_name, 2);
-			ft_putstr_fd(":\n", 2);
-		}
-		ft_putstr_fd("ft_ls: ", 2);
-		if (strrchr(dir_name, '/'))
-			perror(strrchr(dir_name, '/') + 1);
-		else
-			perror(dir_name);
-		return (0);
-	}
 	if (disp_name == NAME && show_or_not_dir(dir_name) == 1)
 	{
 		ft_putstr(dir_name);
 		ft_putstr(":\n");
 	}
-	f_list = (t_filelist *)malloc_me(sizeof(t_filelist));
+	if ((p_dir = opendir(dir_name)) == NULL)
+	{
+		ft_putstr_fd("ft_ls: ", 2);
+		if (strrchr(dir_name, '/'))
+			perror(strrchr(dir_name, '/') + 1);
+		else
+			perror(dir_name);
+		return ;
+	}
+	f_list = (t_flist *)malloc_me(sizeof(t_flist));
 	f_list = readdir_and_sort_files(p_dir, dir_name);
 	if (g_opt_r_caps == 1)
-		do_opt_r_caps(f_list);
+		do_recursivity(f_list);
 	closedir(p_dir);
 	f_lstdel(&f_list);
-	return (1);
 }
 
-int			main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	int			i;
-	t_dirlist	*list;
+	t_dlist		*list;
 
 	i = 1;
 	if (argc > 1)

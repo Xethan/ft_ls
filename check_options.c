@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/11 11:54:39 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 17:23:38 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,6 @@ extern int g_opt_l;
 extern int g_opt_r;
 extern int g_opt_t;
 
-void	*malloc_me(size_t size)
-{
-	void	*content;
-
-	content = malloc(size);
-	if (content == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	return (content);
-}
-
 int		verif_dir(char *dir_name)
 {
 	if (ft_strequ(dir_name, ".")
@@ -43,9 +30,9 @@ int		verif_dir(char *dir_name)
 	return (0);
 }
 
-int		show_or_not_files(t_filelist **begin_list)
+int		show_or_not_files(t_flist **begin_list)
 {
-	t_filelist *f_list;
+	t_flist		*f_list;
 	int			verif;
 
 	verif = 0;

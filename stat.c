@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/26 15:29:47 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/10 11:49:15 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 17:24:03 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,6 @@
 #include "prototype.h"
 
 extern int g_opt_l;
-
-char	*get_path(char *dir_name, char *file_name)
-{
-	char	*cpy;
-
-	dir_name = ft_strjoin(dir_name, "/");
-	cpy = dir_name;
-	dir_name = ft_strjoin(dir_name, file_name);
-	free(cpy);
-	return (dir_name);
-}
 
 void	itoa_free_space(int length, int info)
 {
@@ -56,7 +45,7 @@ void	disp_all_rights(mode_t rights)
 	disp_rights(rights, 01, 'x');
 }
 
-void	do_opt_l(t_filelist *file, t_info nb_spaces)
+void	do_opt_l(t_flist *file, t_info nb_spaces)
 {
 	disp_type_of_file(file->st->st_mode);
 	disp_all_rights(file->st->st_mode);

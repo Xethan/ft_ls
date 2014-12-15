@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/27 17:21:34 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/11 12:04:09 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 15:49:23 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int		count_spaces(int info, size_t maxlength)
 	return (maxlength);
 }
 
-t_info	how_many_spaces(t_filelist *f_list, t_info max)
+t_info	how_many_spaces(t_flist *f_list, t_info max)
 {
 	max.nlink = count_spaces(f_list->st->st_nlink, max.nlink);
 	if (S_ISCHR(f_list->st->st_mode) || S_ISBLK(f_list->st->st_mode))

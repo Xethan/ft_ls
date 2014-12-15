@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 15:55:43 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 15:48:46 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,20 @@
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
 
-typedef struct			s_dirlist
+typedef struct			s_dlist
 {
 	char				*name;
-	struct s_dirlist	*next;
-}						t_dirlist;
+	struct s_dlist		*next;
+}						t_dlist;
 
-typedef struct			s_filelist
+typedef struct			s_flist
 {
 	char				*name;
 	char				*dir_name;
 	t_stat				*st;
 	char				*path;
-	struct s_filelist	*next;
-}						t_filelist;
+	struct s_flist		*next;
+}						t_flist;
 
 typedef struct			s_info
 {

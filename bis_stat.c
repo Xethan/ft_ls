@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/02 16:56:48 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/10 14:16:00 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 15:59:25 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	disp_type_of_file(mode_t mode)
 		ft_putchar('s');
 }
 
-void	disp_uid_gid(t_filelist *file, t_info nb_spaces)
+void	disp_uid_gid(t_flist *file, t_info nb_spaces)
 {
 	if (getpwuid(file->st->st_uid))
 	{
@@ -55,13 +55,12 @@ void	disp_uid_gid(t_filelist *file, t_info nb_spaces)
 	}
 }
 
-void	disp_maj_min_size(t_filelist *file, t_info nb_spaces)
+void	disp_maj_min_size(t_flist *file, t_info nb_spaces)
 {
 	if (nb_spaces.dev != 0)
 	{
 		if (S_ISCHR(file->st->st_mode) || S_ISBLK(file->st->st_mode))
 		{
-			//itoa_free_space(nb_spaces.dev + 3, major(file->st->st_rdev));
 			itoa_free_space(5, major(file->st->st_rdev));
 			ft_putnbr(major(file->st->st_rdev));
 			ft_putstr(",");
@@ -70,7 +69,6 @@ void	disp_maj_min_size(t_filelist *file, t_info nb_spaces)
 		}
 		else
 		{
-			//put_spaces(nb_spaces.dev + 4, "");
 			itoa_free_space(10, file->st->st_size);
 			ft_putnbr(file->st->st_size);
 		}
@@ -82,7 +80,7 @@ void	disp_maj_min_size(t_filelist *file, t_info nb_spaces)
 	}
 }
 
-void	disp_date_name_link(t_filelist *file)
+void	disp_date_name_link(t_flist *file)
 {
 	char	*date;
 	time_t	modif_time;
@@ -100,7 +98,7 @@ void	disp_date_name_link(t_filelist *file)
 	ft_putstr(" ");
 	ft_putstr(file->name);
 	if (S_ISLNK(file->st->st_mode) != 0)
-	{	
+	{
 		link = (char *)malloc((file->st->st_size + 1) * sizeof(char));
 		readlink(file->path, link, file->st->st_size);
 		link[file->st->st_size] = '\0';

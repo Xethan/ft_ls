@@ -6,24 +6,24 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 11:09:53 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/09 14:56:54 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/15 15:56:18 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include "prototype.h"
 
-void		d_lstadd(t_dirlist **begin_list, t_dirlist *new)
+void	d_lstadd(t_dlist **begin_list, t_dlist *new)
 {
 	new->next = *begin_list;
 	*begin_list = new;
 }
 
-t_dirlist	*d_lstnew(char *name)
+t_dlist	*d_lstnew(char *name)
 {
-	t_dirlist	*new_list;
+	t_dlist		*new_list;
 
-	new_list = (t_dirlist *)malloc_me(sizeof(t_dirlist));
+	new_list = (t_dlist *)malloc_me(sizeof(t_dlist));
 	new_list->name = (char *)malloc_me((ft_strlen(name) + 1) * sizeof(char));
 	if (name == NULL)
 		new_list->name = NULL;
@@ -33,19 +33,19 @@ t_dirlist	*d_lstnew(char *name)
 	return (new_list);
 }
 
-void		d_lst_creat_after(t_dirlist *list, char *name)
+void	d_lst_creat_after(t_dlist *list, char *name)
 {
-	t_dirlist	*new;
+	t_dlist		*new;
 
 	new = d_lstnew(name);
 	new->next = list->next;
 	list->next = new;
 }
 
-void		d_lstdel(t_dirlist **begin_list)
+void	d_lstdel(t_dlist **begin_list)
 {
-	t_dirlist	*p_list;
-	t_dirlist	*cpy;
+	t_dlist		*p_list;
+	t_dlist		*cpy;
 
 	p_list = *begin_list;
 	while (p_list)
@@ -57,9 +57,9 @@ void		d_lstdel(t_dirlist **begin_list)
 	}
 }
 
-void		d_lst_creat_begin(t_dirlist **begin_list, char *name)
+void	d_lst_creat_begin(t_dlist **begin_list, char *name)
 {
-	t_dirlist	*new;
+	t_dlist		*new;
 
 	new = d_lstnew(name);
 	d_lstadd(begin_list, new);
