@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 12:16:13 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/15 17:24:44 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/19 11:05:44 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	do_recursivity(t_flist *f_list)
 {
 	while (f_list)
 	{
-		if (S_ISDIR(f_list->st->st_mode) != 0
+		if (S_ISDIR(f_list->st.st_mode) != 0
 			&& ft_strequ(f_list->name, ".") == 0
 			&& ft_strequ(f_list->name, "..") == 0)
 		{
@@ -122,7 +122,7 @@ int		main(int argc, char **argv)
 	i = 1;
 	if (argc > 1)
 		i = check_options(argv);
-	list = create_list_from_argv(argv, i);
+	list = create_list_from_argv(argv, i - 1);
 	if (argc == i)
 		opendir_and_list(".", NO_NAME);
 	else if (argc == i + 1 && list)

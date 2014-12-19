@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/20 11:08:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/15 17:23:38 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/19 11:27:20 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	get_options(char c)
 		g_opt_r = 1;
 	else if (c == 't')
 		g_opt_t = 1;
-	else if (c != '1')
+	else
 	{
 		ft_putstr_fd("ft_ls: illegal option -- ", 2);
 		ft_putchar_fd(c, 2);

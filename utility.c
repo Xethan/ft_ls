@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/15 17:23:08 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/15 17:27:12 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/19 11:15:48 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,20 @@ extern int g_opt_t;
 extern int g_opt_r;
 extern int g_opt_a;
 extern int g_opt_l;
+
+char	*xreadlink(char *path, size_t bufsize)
+{
+	char	*link;
+
+	link = (char *)malloc_me((bufsize + 1) * sizeof(char));
+	if ((readlink(path, link, bufsize)) == -1)
+	{
+		perror("ft_ls: readlink:");
+		exit(EXIT_FAILURE);
+	}
+	link[bufsize] = '\0';
+	return (link);
+}
 
 void	disp_filelist(t_flist *f_list, t_info nb_spaces)
 {
@@ -46,28 +60,20 @@ void	*malloc_me(size_t size)
 	return (content);
 }
 
-int		cmp_args(char *arg1, char *arg2)
+int		cmp_args(const char *arg1, const char *arg2)
 {
-	t_stat	*p_stat1;
-	t_stat	*p_stat2;
-	time_t	mtime1;
-	time_t	mtime2;
+	t_stat	p_stat1;
+	t_stat	p_stat2;
 
 	if (g_opt_t == 1)
 	{
-		p_stat1 = (t_stat *)malloc_me(sizeof(t_stat));
-		p_stat2 = (t_stat *)malloc_me(sizeof(t_stat));
-		if (lstat(arg1, p_stat1) == -1 || lstat(arg2, p_stat2) == -1)
+		if (lstat(arg1, &p_stat1) == -1 || lstat(arg2, &p_stat2) == -1)
 		{
 			perror("stat");
 			exit(EXIT_FAILURE);
 		}
-		mtime1 = p_stat1->st_mtime;
-		mtime2 = p_stat2->st_mtime;
-		free(p_stat1);
-		free(p_stat2);
-		if (mtime1 != mtime2)
-			return ((mtime1 - mtime2) * g_opt_r);
+		if (p_stat1.st_mtime != p_stat2.st_mtime)
+			return ((p_stat1.st_mtime - p_stat2.st_mtime) * g_opt_r);
 	}
 	if (g_opt_r == 1)
 		return (-1 * ft_strcmp(arg1, arg2));

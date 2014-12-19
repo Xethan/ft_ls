@@ -6,7 +6,7 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/19 15:56:05 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/15 15:48:46 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/19 10:38:22 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct			s_flist
 {
 	char				*name;
 	char				*dir_name;
-	t_stat				*st;
+	t_stat				st;
 	char				*path;
 	struct s_flist		*next;
 }						t_flist;

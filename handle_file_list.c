@@ -6,12 +6,30 @@
 /*   By: ncolliau <ncolliau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/05 15:25:16 by ncolliau          #+#    #+#             */
-/*   Updated: 2014/12/15 17:32:41 by ncolliau         ###   ########.fr       */
+/*   Updated: 2014/12/19 11:26:29 by ncolliau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include "prototype.h"
+
+void	disp_lists(t_dlist *error_list, \
+	t_dlist *dir_list, t_flist *file_list, t_info nb_spaces)
+{
+	while (error_list)
+	{
+		ft_putstr_fd("ft_ls: ", 2);
+		ft_putstr_fd(error_list->name, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		error_list = error_list->next;
+	}
+	if (file_list)
+		disp_filelist(file_list, nb_spaces);
+	if (file_list && dir_list)
+		ft_putchar('\n');
+	f_lstdel(&file_list);
+	d_lstdel(&error_list);
+}
 
 void	f_lstadd(t_flist **begin_list, t_flist *new)
 {
@@ -30,10 +48,10 @@ t_flist	*f_lstnew(char *name, char *folder)
 		new->path = get_path(folder, name);
 	else if ((new->path = ft_strdup(name)) == NULL)
 		exit(EXIT_FAILURE);
-	new->st = (t_stat *)malloc_me(sizeof(t_stat));
-	if (lstat(new->path, new->st) == -1)
+	if (lstat(new->path, &(new->st)) == -1)
 	{
-		perror("stat");
+		ft_putstr_fd("ft_ls: stat: ", 2);
+		perror(name);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -58,7 +76,6 @@ void	f_lstdel(t_flist **begin_list)
 		free(p_list->name);
 		free(p_list->path);
 		free(p_list->dir_name);
-		free(p_list->st);
 		cpy = p_list;
 		p_list = p_list->next;
 		free(cpy);
